@@ -11,9 +11,12 @@ public:
 	static cocos2d::Scene* createScene();
 	virtual bool init();
 	
+	void initGra(int winWidth, int winHeight);
+	void initChar(int winWidth, int winHeight);
 	void Talk(int winWidth, int winHeight);
 	void Event(Ref *pSrnder);
 	
+	void CharChange(int CharNo, int FaceNo, bool visible);
 	
 	int talkNo;
 	CREATE_FUNC(AlchemyScene);

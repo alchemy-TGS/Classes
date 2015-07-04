@@ -17,25 +17,16 @@ bool AlchemyScene::init()
 	auto view = Director::getInstance()->getOpenGLView();
 	auto size = view->getFrameSize();
 	
+	
+	initGra(size.width, size.height);
+	initChar(size.width, size.height);
 	Talk(size.width, size.height);
 	
 	talkNo = 0;
 	return true;
 }
 
-void AlchemyScene::Talk(int winWidth, int winHeight){
-	auto view = Director::getInstance()->getOpenGLView();
-	
-	//	todo	もっと綺麗に。セリフ枠の
-	
-	auto tapArea = Sprite::create();
-	auto size = view->getFrameSize();
-	tapArea->setContentSize(size);
-	auto tapAreaItem = MenuItemSprite::create(tapArea, tapArea, CC_CALLBACK_1(AlchemyScene::Event, this));
-	auto tapAreaMenu = Menu::create(tapAreaItem, NULL);
-	addChild(tapAreaMenu);
-	
-	tapAreaMenu->setPosition(winWidth/2,winHeight/2);
+void AlchemyScene::initGra(int winWidth, int winHeight){
 	
 	auto mesWin = Sprite::create();
 	mesWin->setTextureRect(Rect(0, 0, winWidth - winWidth/10 , winHeight/2 - winHeight / 10));
@@ -44,20 +35,9 @@ void AlchemyScene::Talk(int winWidth, int winHeight){
 	mesWin->setTag(100);
 	mesWin->setZOrder(100);
 	addChild(mesWin);
-	
-	
-	auto mes = Label::createWithSystemFont("イベントシーンイメージ", "Arial", 90);
-	
-	if (winHeight == 1024) {
-		mes->setSystemFontSize(45);
-	}
-	
-	mes->setPosition(mesWin->getPosition());
-	mes->setZOrder(101);
-	mes->setTag(101);
-	addChild(mes);
-	
-	
+}
+
+void AlchemyScene::initChar(int winWidth, int winHeight){
 	
 	auto H2_normal	= Sprite::create("HomunImg/H2/H2_Card_SD_normal.png");
 	auto H2_smile	= Sprite::create("HomunImg/H2/H2_Card_SD_smile.png");
@@ -111,6 +91,54 @@ void AlchemyScene::Talk(int winWidth, int winHeight){
 	addChild(O2_smile);
 	addChild(O2_trouble);
 	addChild(O2_angry);
+
+}
+
+void AlchemyScene::CharChange(int CharNo, int FaceNo, bool visible){
+	auto H2_N = (Sprite*)this->getChildByTag(11);
+	auto H2_S = (Sprite*)this->getChildByTag(12);
+	auto H2_T = (Sprite*)this->getChildByTag(13);
+	auto H2_A = (Sprite*)this->getChildByTag(14);
+	auto O2_N = (Sprite*)this->getChildByTag(21);
+	auto O2_S = (Sprite*)this->getChildByTag(22);
+	auto O2_T = (Sprite*)this->getChildByTag(23);
+	auto O2_A = (Sprite*)this->getChildByTag(24);
+
+	
+	
+	
+}
+
+void AlchemyScene::Talk(int winWidth, int winHeight){
+	auto view = Director::getInstance()->getOpenGLView();
+	auto size = view->getFrameSize();
+	//	todo	もっと綺麗に。セリフ枠の
+	
+	auto tapArea = Sprite::create();
+
+	tapArea->setContentSize(size);
+	auto tapAreaItem = MenuItemSprite::create(tapArea, tapArea, CC_CALLBACK_1(AlchemyScene::Event, this));
+	auto tapAreaMenu = Menu::create(tapAreaItem, NULL);
+	addChild(tapAreaMenu);
+	
+	tapAreaMenu->setPosition(winWidth/2,winHeight/2);
+	
+	//		auto H2_N = (Sprite*)this->getChildByTag(11);
+	auto mesWin = (Sprite*)this->getChildByTag(100);
+	auto mes = Label::createWithSystemFont("イベントシーンイメージ", "Arial", 90);
+	
+	if (winHeight == 1024) {
+		mes->setSystemFontSize(45);
+	}
+	
+	mes->setPosition(mesWin->getPosition());
+	mes->setZOrder(101);
+	mes->setTag(101);
+	addChild(mes);
+	
+	
+	
+
 }
 
 void AlchemyScene::Event(Ref *pSrnder){
