@@ -19,7 +19,7 @@ bool TitleScene::init()
 	//	サウンドテスト
 	static auto titleBgm = SimpleAudioEngine::getInstance();
 	titleBgm->setBackgroundMusicVolume(1.0f);
-	titleBgm->playBackgroundMusic("Sound/Title_BGM.mp3",true);
+	titleBgm->playBackgroundMusic("Sound/Title.mp3",true);
 
 	return true;
 }
