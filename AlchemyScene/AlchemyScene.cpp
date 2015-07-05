@@ -17,9 +17,11 @@ bool AlchemyScene::init()
 	auto view = Director::getInstance()->getOpenGLView();
 	auto size = view->getFrameSize();
 	
-	
+	//	キャラ以外の画像の用意
 	initGra(size.width, size.height);
+	//	キャラ画像の用意
 	initChar(size.width, size.height);
+	//	会話部分
 	Talk(size.width, size.height);
 	
 	talkNo = 0;
