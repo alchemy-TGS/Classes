@@ -27,13 +27,13 @@ int bondCount[] = {
 
 std::string image[] = {
 	"AlchemyImg/AtomImg/atom_01.png",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"AlchemyImg/AtomImg/atom_09.png",
+	"AlchemyImg/AtomImg/atom_02.png",
+	"AlchemyImg/AtomImg/atom_03.png",
+	"AlchemyImg/AtomImg/atom_04.png",
+	"AlchemyImg/AtomImg/atom_05.png",
+	"AlchemyImg/AtomImg/atom_06.png",
+	"AlchemyImg/AtomImg/atom_07.png",
+	"AlchemyImg/AtomImg/atom_09.png",       //9?
 };
 
 std::string safeImage  = "AlchemyImg/BondImg/bond_01.png";
