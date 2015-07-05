@@ -11,7 +11,7 @@ bool Atom::init(AtomNum type, int groupnum) {
 	static auto view = Director::getInstance()->getOpenGLView();
 	static auto size = view->getFrameSize();
 	static auto changeScale = size.height / 1024;
-		
+    
 	atomnum = type;
 	
 	//原子データを参照
@@ -27,7 +27,7 @@ bool Atom::init(AtomNum type, int groupnum) {
 	
 	//原子背景スプライト
 	//	atom->setPosition(200,200);
-//	atom->setScale(1);
+    //	atom->setScale(1);
 	atom->setTag(100);
 	addChild(atom);
 	
@@ -37,16 +37,16 @@ bool Atom::init(AtomNum type, int groupnum) {
 	atomLabel->setTag(110);
 	atom->addChild(atomLabel);
 	/*
-	auto atomlabel = LabelTTF::create(atomname, "Arial", int(size.height/10) * changeScale);
-	atomlabel->setPosition(atom->getContentSize().width/2,atom->getContentSize().height/2);
-	atomlabel->setTag(110);
-	atom->addChild(atomlabel);
-	*/
+     auto atomlabel = LabelTTF::create(atomname, "Arial", int(size.height/10) * changeScale);
+     atomlabel->setPosition(atom->getContentSize().width/2,atom->getContentSize().height/2);
+     atomlabel->setTag(110);
+     atom->addChild(atomlabel);
+     */
 	
 	//結合手背景スプライト
 	bond->setPosition(atom->getContentSize().width - (size.width / 100),
 					  atom->getContentSize().height- (size.height/ 100));
-//	bond->setScale(0.5f);
+    //	bond->setScale(0.5f);
 	bond->setTag(120);
 	atom->addChild(bond);
 	
@@ -65,19 +65,13 @@ bool Atom::init(AtomNum type, int groupnum) {
 
 void Atom::update(float delta)
 {
-	/*
-	 std::string str = std::to_string(bondCount);
-	 bondlabel->setString(str);
-	 
-	 Sprite* sprite = Sprite::create();
-	 sprite->setTextureRect(atom->getBoundingBox());
-	 sprite->setColor(Color3B::WHITE);
-	 
-	 float x = atom->getPositionX();
-	 float y = atom->getPositionY();
-	 sprite->setPosition(Point(x, y));
-	 this->addChild(sprite);
-	 */
+    std::string str = std::to_string(bondCount);
+    bondlabel->setString(str);
+    
+    if(bondCount == 0){
+        auto bond = (Sprite*)atom->getChildByTag(120);
+        bond->setTexture(AtomData::getInstance()->GetPinchBondImageName());
+    }
 }
 
 
@@ -122,4 +116,6 @@ void Atom::groupReset()
 void Atom::bondCountReset()
 {
 	bondCount = initialBondCount;
+    auto bond = (Sprite*)atom->getChildByTag(120);
+    bond->setTexture(AtomData::getInstance()->GetSafeBondImageName());
 }

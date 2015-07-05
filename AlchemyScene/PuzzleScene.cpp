@@ -27,9 +27,9 @@ bool PuzzleScene::init() {
 	//	白い画像にプログラム側で色をつけます。
 	Sprite* header = Sprite::create("AlchemyImg/Header/header_Frame.png");
 	header->setColor(Color3B(103, 167, 12));
-//	header->setTextureRect(Rect(0,0,size.width,size.height/6));
-//	header->setColor(Color3B::GRAY);
- 
+    //	header->setTextureRect(Rect(0,0,size.width,size.height/6));
+    //	header->setColor(Color3B::GRAY);
+    
 	float headerx = size.width/2;
 	float headery = size.height - header->getContentSize().height / 2;
 	header->setPosition(Point(headerx, headery));
@@ -47,17 +47,17 @@ bool PuzzleScene::init() {
 	this->addChild(QuestView);
 	
 	//Card表示
-	/*	
-		汚くてごめん。
-		クエストを選択した後の編成画面で選んだカードが下に並びます。
-		カード枠はヘッダーと同じく白い画像にプログラム側で色を付ける。
-		ここらへんの作りは任せます。
-		並びかた（数値的な）参考にしてもらえれば……
+	/*
+     汚くてごめん。
+     クエストを選択した後の編成画面で選んだカードが下に並びます。
+     カード枠はヘッダーと同じく白い画像にプログラム側で色を付ける。
+     ここらへんの作りは任せます。
+     並びかた（数値的な）参考にしてもらえれば……
 	 */
 	Sprite* footer = Sprite::create();
 	footer->setTextureRect(Rect(0,0,size.width,size.height/6));
 	footer->setColor(Color3B::GRAY);
- 
+    
 	float footerx = size.width/2;
 	float footery = size.height/12;
 	footer->setPosition(Point(footerx, footery));
@@ -81,7 +81,7 @@ bool PuzzleScene::init() {
 	cardFrame2->setPosition(size.width / 3 * 2 - cardFrame1->getContentSize().width / 2,
 							cardPosY);
 	card3Menu->setPosition(size.width / 3 * 3 - cardFrame1->getContentSize().width / 2,
-							cardPosY);
+                           cardPosY);
 	
 	addChild(cardFrame1);
 	addChild(cardFrame2);
@@ -111,10 +111,10 @@ bool PuzzleScene::init() {
 	}
 	/*
 	 for(int i=0;i<lines;i++){
-		saveLineNode[i] = DrawNode::create();
-		saveLineNode[i]->clear();
-		addChild(saveLineNode[i]);
-		saveLineGroup[i] = -1;
+     saveLineNode[i] = DrawNode::create();
+     saveLineNode[i]->clear();
+     addChild(saveLineNode[i]);
+     saveLineGroup[i] = -1;
 	 }
 	 */
 	
@@ -142,11 +142,11 @@ bool PuzzleScene::init() {
 	
 	//イベントリスナーを作成
 	auto listener = EventListenerTouchOneByOne::create();
- 
+    
 	listener->onTouchBegan = CC_CALLBACK_2(PuzzleScene::onTouchBegan, this);
 	listener->onTouchMoved = CC_CALLBACK_2(PuzzleScene::onTouchMoved, this);
 	listener->onTouchEnded = CC_CALLBACK_2(PuzzleScene::onTouchEnded, this);
- 
+    
 	//イベントリスナーを登録
 	this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
 	
@@ -162,13 +162,13 @@ bool PuzzleScene::init() {
 	
 	/*
 	 for(int i=0;i<atoms;i++){
-		if(atom[i] == NULL){
+     if(atom[i] == NULL){
 	 atom[i] = new Atom;
 	 atom[i]->init(ATOM_O);
 	 atom[i]->atom->setPosition(100,100);
 	 addChild(atom[i]);
 	 break;
-		}
+     }
 	 }*/
 	
 	
@@ -296,14 +296,16 @@ void PuzzleScene::update(float delta)
 			for(int i=0;i<atoms;i++){
 				if(atom[i] == NULL) continue;
 				if(atom[i]->getGroup() == group_i){
-					atom[i]->atom->removeFromParentAndCleanup(true);
+					atom[i]->removeFromParentAndCleanup(true);
 					atom[i] = NULL;
-					for(int line_i=0;line_i<lines;line_i++){
-						keepLineStartPos[line_i] = Vec2(-1,-1);
-						keepLineGoalPos[line_i] = Vec2(-1,-1);
-					}
+					
 				}
 			}
+            for(int line_i=0;line_i<lines;line_i++){
+                keepLineStartPos[line_i] = Vec2(-1,-1);
+                keepLineGoalPos[line_i] = Vec2(-1,-1);
+            }
+            groupReset();
 		}
 	}
 	
