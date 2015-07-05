@@ -22,7 +22,9 @@ bool PuzzleScene::init() {
 	auto size = view->getFrameSize();
 	
 	colorChangeFrag = false;
-	
+    
+    
+    
 	//ヘッダー
 	//	白い画像にプログラム側で色をつけます。
 	Sprite* header = Sprite::create("AlchemyImg/Header/header_Frame.png");
@@ -46,6 +48,9 @@ bool PuzzleScene::init() {
 	QuestView->setPosition(header->getPosition());
 	this->addChild(QuestView);
 	
+    
+    
+    
 	//Card表示
 	/*
      汚くてごめん。
@@ -54,6 +59,8 @@ bool PuzzleScene::init() {
      ここらへんの作りは任せます。
      並びかた（数値的な）参考にしてもらえれば……
 	 */
+    
+    
 	Sprite* footer = Sprite::create();
 	footer->setTextureRect(Rect(0,0,size.width,size.height/6));
 	footer->setColor(Color3B::GRAY);
@@ -63,44 +70,70 @@ bool PuzzleScene::init() {
 	footer->setPosition(Point(footerx, footery));
 	this->addChild(footer);
 	
+    
 	Sprite* cardFrame1 = Sprite::create("AlchemyImg/Card/card_Frame.png");
 	Sprite* cardFrame2 = Sprite::create("AlchemyImg/Card/card_Frame.png");
 	Sprite* cardFrame3 = Sprite::create("AlchemyImg/Card/card_Frame.png");
 	
-	auto card3Item = MenuItemSprite::create(cardFrame3, cardFrame3,
-											CC_CALLBACK_1(PuzzleScene::Card3PushCallBack, this));
-	auto card3Menu = Menu::create(card3Item, NULL);
+	
 	
 	cardFrame1->setColor(Color3B(22, 94, 131));
 	cardFrame2->setColor(Color3B(22, 94, 131));
-	cardFrame3->setColor(Color3B(228, 94, 50));
+    cardFrame3->setColor(Color3B(22, 94, 131));
+//	cardFrame3->setColor(Color3B(228, 94, 50));
 	
 	int cardPosY = cardFrame1->getContentSize().height / 2;
 	cardFrame1->setPosition(size.width / 3 - cardFrame1->getContentSize().width / 2,
 							cardPosY);
 	cardFrame2->setPosition(size.width / 3 * 2 - cardFrame1->getContentSize().width / 2,
 							cardPosY);
-	card3Menu->setPosition(size.width / 3 * 3 - cardFrame1->getContentSize().width / 2,
+	cardFrame3->setPosition(size.width / 3 * 3 - cardFrame1->getContentSize().width / 2,
                            cardPosY);
 	
 	addChild(cardFrame1);
 	addChild(cardFrame2);
+	addChild(cardFrame3);
+    
+    
+    //パーティホムンの初期化　　userDefault（？）で、もってくればいいか？
+    partyHomun[0] = HOMUN_C;
+	partyHomun[1] = HOMUN_H2;
+    partyHomun[2] = HOMUN_O2;
+    HomunData* homunData = HomunData::getInstance();
+    
+	Sprite* card1 = Sprite::create(homunData->getImageName(partyHomun[0]));
+	Sprite* card2 = Sprite::create(homunData->getImageName(partyHomun[1]));
+	Sprite* card3 = Sprite::create(homunData->getImageName(partyHomun[2]));
+
+	auto card1Item = MenuItemSprite::create(card1, card1,
+											CC_CALLBACK_1(PuzzleScene::Card1PushCallBack, this));
+	auto card1Menu = Menu::create(card1Item, NULL);
+    
+    auto card2Item = MenuItemSprite::create(card2, card2,
+											CC_CALLBACK_1(PuzzleScene::Card2PushCallBack, this));
+	auto card2Menu = Menu::create(card2Item, NULL);
+    
+    auto card3Item = MenuItemSprite::create(card3, card3,
+											CC_CALLBACK_1(PuzzleScene::Card3PushCallBack, this));
+	auto card3Menu = Menu::create(card3Item, NULL);
+    
+	card1Menu->setPosition(cardFrame1->getPosition());
+	card2Menu->setPosition(cardFrame2->getPosition());
+	card3Menu->setPosition(cardFrame3->getPosition());
+    
+	
+    
+	addChild(card1Menu);
+	addChild(card2Menu);
 	addChild(card3Menu);
-	
-	Sprite* card1 = Sprite::create("AlchemyImg/Card/H2_Card_SD_Alchemy.png");
-	Sprite* card2 = Sprite::create("AlchemyImg/Card/C2H5OH_Card_SD_Alchemy.png");
-	Sprite* card3 = Sprite::create("AlchemyImg/Card/O2_Card_SD_Alchemy.png");
-	
-	card1->setPosition(cardFrame1->getPosition());
-	card2->setPosition(cardFrame2->getPosition());
-	card3->setPosition(card3Menu->getPosition());
-	
-	addChild(card1);
-	addChild(card2);
-	addChild(card3);
+    
 	
 	//　汚いのここまで
 	
+    
+    
+    
+    
 	//ノードの初期化
 	lineNode = DrawNode::create();
 	addChild(lineNode);
@@ -117,9 +150,7 @@ bool PuzzleScene::init() {
      saveLineGroup[i] = -1;
 	 }
 	 */
-	
-	
-	
+    
 	//条件の表示
 	atomCondition = 5;
 	conditionLabel = LabelTTF::create("", "Arial", int(size.height/12));
@@ -179,14 +210,18 @@ bool PuzzleScene::init() {
 	return true;
 }
 
-//	α版用に深く考えずに作ったカードを押した時（スキル発動（仮））の（コレは消す予定）
-void PuzzleScene::Card3PushCallBack(Ref *pSender){
-	log("card3Pushed");
+
+void PuzzleScene::CardEffect(HomunNum num){
+    if(num == HOMUN_NULL){
+        return;
+    }
 	auto view = Director::getInstance()->getOpenGLView();
 	auto size = view->getFrameSize();
 	
-	auto CutIn = Sprite::create("HomunImg/O2/O2_Card_big.png");
-	//CutIn->setPosition(size.width/2, size.height / 2);
+    HomunData* homunData = HomunData::getInstance();
+
+	auto CutIn = Sprite::create(homunData->getSkillImageName(num));
+    
 	CutIn->setPosition(size.width/2, size.height + CutIn->getContentSize().height);
 	CutIn->setZOrder(1000);
 	addChild(CutIn);
@@ -203,8 +238,21 @@ void PuzzleScene::Card3PushCallBack(Ref *pSender){
 	auto sequence = Sequence::create(easeAct1, delay1, easeAct2, remove, NULL);
 	
 	CutIn->runAction(sequence);
-	
 }
+
+//	α版用に深く考えずに作ったカードを押した時（スキル発動（仮））の（コレは消す予定）
+void PuzzleScene::Card1PushCallBack(Ref *pSender){
+    CardEffect(partyHomun[0]);
+}
+
+void PuzzleScene::Card2PushCallBack(Ref *pSender){
+    CardEffect(partyHomun[1]);
+}
+
+void PuzzleScene::Card3PushCallBack(Ref *pSender){
+    CardEffect(partyHomun[2]);
+}
+
 
 bool PuzzleScene::popPosCheck(int num, int x, int y){
 	for(int i=0;i<atoms;i++){
@@ -220,6 +268,38 @@ bool PuzzleScene::popPosCheck(int num, int x, int y){
 	return false;
 }
 
+AtomNum PuzzleScene::popAtomSelect(){
+    int randRange = 0;
+    for(int f=0;f<3;f++){
+        if(partyHomun[f] != HOMUN_NULL){
+            randRange += 100;
+        }
+    }
+    int count = (arc4random()%randRange) +1;
+    int* droprate = HomunData::getInstance()->GetDropRate();
+    for(int droprate_i = 0;*(droprate + droprate_i) != -1;droprate_i++){
+        for(int party_i =0;party_i<3;party_i++){
+            log("%d,%d",*(droprate + ((partyHomun[party_i]+1)*5) + droprate_i -5),count);
+            count -= *(droprate + ((partyHomun[party_i]+1)*5) + droprate_i -5);
+            if(count < 0){
+                if(droprate_i == 0){
+                    return ATOM_H;
+                }
+                if(droprate_i == 1){
+                    return ATOM_O;
+                }
+                if(droprate_i == 2){
+                    return ATOM_C;
+                }
+                if(droprate_i == 3){
+                    return ATOM_N;
+                }
+            }
+        }
+    }
+
+}
+
 void PuzzleScene::update(float delta)
 {
 	//画面のサイズを取得
@@ -232,14 +312,16 @@ void PuzzleScene::update(float delta)
 		for(int i=0;i<atoms;i++){
 			if(atom[i] == NULL){
 				atom[i] = new Atom;
-				
+				/*
 				if(i%2 == 0){
 					atom[i]->init(ATOM_H, i);
 				}
 				if(i%2 == 1){
 					atom[i]->init(ATOM_O, i);
-				}
-				
+				}*/
+                
+                atom[i]->init(popAtomSelect(), i);
+                
 				int posRandX;
 				int posRandY;
 				do

@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "cocos2d.h"
 #include "AtomClass.h"
+#include "HomunData.h"
 #include "ResultScene.h"
 
 USING_NS_CC;
@@ -14,9 +15,9 @@ private:
 	static const int atoms = 10;
 	Atom *atom[atoms];
 	
-	
-	//重なりチェック関数
-	bool popPosCheck(int num, int x, int y);
+    
+	//ゲーム中にしようするホムン　最大３
+    HomunNum partyHomun[3];
 	
 	
 	//条件表示関連
@@ -48,7 +49,16 @@ private:
 	int keepAtomGroup;
 	Atom *keepAtom;
 	
+    
+    //重なりチェック関数
+	bool popPosCheck(int num, int x, int y);
+    //生成する原子選択
+    AtomNum popAtomSelect();
+    
+    //グループ解除関数
 	void groupReset();
+    
+    //グループ化関数
 	void setGroup(int set,int sett);
 	
 	
@@ -64,7 +74,10 @@ public:
 	void update(float delta);
 	
 	//	Cardが押された時
-	void Card3PushCallBack(Ref* pSender);
+    void CardEffect(HomunNum num);
+	void Card1PushCallBack(Ref *pSender);
+    void Card2PushCallBack(Ref* pSender);
+    void Card3PushCallBack(Ref *pSender);
 	//	制限時間に合わせてヘッダーの色を変える
 	void timeColorChange();
 	bool colorChangeFrag;
