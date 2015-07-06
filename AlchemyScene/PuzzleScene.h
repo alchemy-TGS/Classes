@@ -18,6 +18,7 @@ private:
     
 	//ゲーム中にしようするホムン　最大３
     HomunNum partyHomun[3];
+    int nowSkillTrun[3];
 	
 	
 	//条件表示関連
@@ -74,7 +75,7 @@ public:
 	void update(float delta);
 	
 	//	Cardが押された時
-    void CardEffect(HomunNum num);
+    void CardEffect(int cardnum);
 	void Card1PushCallBack(Ref *pSender);
     void Card2PushCallBack(Ref* pSender);
     void Card3PushCallBack(Ref *pSender);

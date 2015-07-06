@@ -75,7 +75,9 @@ bool PuzzleScene::init() {
 	Sprite* cardFrame2 = Sprite::create("AlchemyImg/Card/card_Frame.png");
 	Sprite* cardFrame3 = Sprite::create("AlchemyImg/Card/card_Frame.png");
 	
-	
+	cardFrame1->setTag(1100);
+    cardFrame2->setTag(1101);
+    cardFrame3->setTag(1102);
 	
 	cardFrame1->setColor(Color3B(22, 94, 131));
 	cardFrame2->setColor(Color3B(22, 94, 131));
@@ -96,10 +98,15 @@ bool PuzzleScene::init() {
     
     
     //パーティホムンの初期化　　userDefault（？）で、もってくればいいか？
-    partyHomun[0] = HOMUN_C;
-	partyHomun[1] = HOMUN_H2;
-    partyHomun[2] = HOMUN_O2;
     HomunData* homunData = HomunData::getInstance();
+    
+    partyHomun[0] = HOMUN_H2;
+	partyHomun[1] = HOMUN_O2;
+    partyHomun[2] = HOMUN_NULL;
+    nowSkillTrun[0] = homunData->getSkillTrun(partyHomun[0]);
+    nowSkillTrun[1] = homunData->getSkillTrun(partyHomun[1]);
+    nowSkillTrun[2] = homunData->getSkillTrun(partyHomun[2]);
+    
     
 	Sprite* card1 = Sprite::create(homunData->getImageName(partyHomun[0]));
 	Sprite* card2 = Sprite::create(homunData->getImageName(partyHomun[1]));
@@ -129,10 +136,6 @@ bool PuzzleScene::init() {
     
 	
 	//　汚いのここまで
-	
-    
-    
-    
     
 	//ノードの初期化
 	lineNode = DrawNode::create();
@@ -152,7 +155,7 @@ bool PuzzleScene::init() {
 	 */
     
 	//条件の表示
-	atomCondition = 5;
+	atomCondition = 20;
 	conditionLabel = LabelTTF::create("", "Arial", int(size.height/12));
 	conditionLabel->setPosition(Point(header->getContentSize().width / 4 * 3,
 									  header->getPosition().y - (header->getContentSize().height / 5)));
@@ -211,16 +214,20 @@ bool PuzzleScene::init() {
 }
 
 
-void PuzzleScene::CardEffect(HomunNum num){
-    if(num == HOMUN_NULL){
+void PuzzleScene::CardEffect(int cardnum){
+    if(partyHomun[cardnum] == HOMUN_NULL){
+        return;
+    }
+    if(nowSkillTrun[cardnum] > 0){
         return;
     }
 	auto view = Director::getInstance()->getOpenGLView();
 	auto size = view->getFrameSize();
 	
+    //アニメーション画像の用意
     HomunData* homunData = HomunData::getInstance();
 
-	auto CutIn = Sprite::create(homunData->getSkillImageName(num));
+	auto CutIn = Sprite::create(homunData->getSkillImageName(partyHomun[cardnum]));
     
 	CutIn->setPosition(size.width/2, size.height + CutIn->getContentSize().height);
 	CutIn->setZOrder(1000);
@@ -238,19 +245,27 @@ void PuzzleScene::CardEffect(HomunNum num){
 	auto sequence = Sequence::create(easeAct1, delay1, easeAct2, remove, NULL);
 	
 	CutIn->runAction(sequence);
+    
+    
+    //スキル
+    nowSkillTrun[cardnum] = homunData->getSkillTrun(partyHomun[cardnum]);
+    auto cardFrame = (Sprite*)this->getChildByTag(1100 + cardnum);
+    cardFrame->setColor(Color3B(22, 94, 131));
+    
+    nowTime += 10;
 }
 
 //	α版用に深く考えずに作ったカードを押した時（スキル発動（仮））の（コレは消す予定）
 void PuzzleScene::Card1PushCallBack(Ref *pSender){
-    CardEffect(partyHomun[0]);
+    CardEffect(0);
 }
 
 void PuzzleScene::Card2PushCallBack(Ref *pSender){
-    CardEffect(partyHomun[1]);
+    CardEffect(1);
 }
 
 void PuzzleScene::Card3PushCallBack(Ref *pSender){
-    CardEffect(partyHomun[2]);
+    CardEffect(2);
 }
 
 
@@ -279,25 +294,28 @@ AtomNum PuzzleScene::popAtomSelect(){
     int* droprate = HomunData::getInstance()->GetDropRate();
     for(int droprate_i = 0;*(droprate + droprate_i) != -1;droprate_i++){
         for(int party_i =0;party_i<3;party_i++){
-            log("%d,%d",*(droprate + ((partyHomun[party_i]+1)*5) + droprate_i -5),count);
-            count -= *(droprate + ((partyHomun[party_i]+1)*5) + droprate_i -5);
-            if(count < 0){
-                if(droprate_i == 0){
-                    return ATOM_H;
-                }
-                if(droprate_i == 1){
-                    return ATOM_O;
-                }
-                if(droprate_i == 2){
-                    return ATOM_C;
-                }
-                if(droprate_i == 3){
-                    return ATOM_N;
+            if(partyHomun[party_i] != HOMUN_NULL){
+                log("%d,%d",*(droprate + (partyHomun[party_i]*5) + droprate_i),count);
+                count -= *(droprate + partyHomun[party_i]*5 + droprate_i );
+                if(count < 0){
+                    if(droprate_i == 0){
+                        return ATOM_H;
+                    }
+                    if(droprate_i == 1){
+                        return ATOM_O;
+                    }
+                    if(droprate_i == 2){
+                        return ATOM_C;
+                    }
+                    if(droprate_i == 3){
+                        return ATOM_N;
+                    }
                 }
             }
         }
     }
-
+    log("DropGenerateError");
+    return ATOM_H;
 }
 
 void PuzzleScene::update(float delta)
@@ -375,6 +393,10 @@ void PuzzleScene::update(float delta)
 		}
 		if(arraCount == 8){
 			atomCondition--;
+            for(int i=0;i<3;i++){
+                nowSkillTrun[i]--;
+            }
+            
 			for(int i=0;i<atoms;i++){
 				if(atom[i] == NULL) continue;
 				if(atom[i]->getGroup() == group_i){
@@ -421,6 +443,16 @@ void PuzzleScene::update(float delta)
 		colorChangeFrag = true;
 		timeColorChange();
 	}
+    
+    //スキルが溜まったら色変更
+    for(int i=0;i<3;i++){
+        if(partyHomun[i] != HOMUN_NULL){
+            if(nowSkillTrun[i] <= 0){
+                auto cardFrame = (Sprite*)this->getChildByTag(1100 + i);
+                cardFrame->setColor(Color3B(228, 94, 50));
+            }
+        }
+    }
 }
 int changecount = 0;
 void PuzzleScene::timeColorChange(){
