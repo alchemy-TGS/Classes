@@ -155,7 +155,9 @@ bool PuzzleScene::init() {
 	 */
     
 	//条件の表示
-	atomCondition = 20;
+	condition = 20;
+    conditionType = HOMUN_H2O;
+    
 	conditionLabel = LabelTTF::create("", "Arial", int(size.height/12));
 	conditionLabel->setPosition(Point(header->getContentSize().width / 4 * 3,
 									  header->getPosition().y - (header->getContentSize().height / 5)));
@@ -171,7 +173,7 @@ bool PuzzleScene::init() {
 	//初期タイマーのセット
 	timeswitch = true;
 	nowTime = 120;			//秒
-	frameCount = 0;
+	frameCount = 0;     
 	
 	
 	//イベントリスナーを作成
@@ -366,55 +368,60 @@ void PuzzleScene::update(float delta)
 	}
 	
 	
-	
+	auto atomData = AtomData::getInstance();
+    auto pPattern = atomData->GetDestroyPattern();
 	for(int group_i=0;group_i<atoms;group_i++){
-		int arra[] = {
-			2,
-			0,
-			0,
-			0,
-			0,
-			0,
-			0,
-			1,
-		};
-		int arraCount = 0;
+        for(int arra_i = 0;arra_i<8;arra_i++){
+            int arra[] = {
+                *(pPattern + arra_i * 8),
+                *(pPattern + arra_i * 8 + 1),
+                *(pPattern + arra_i * 8 + 2),
+                *(pPattern + arra_i * 8 + 3),
+                *(pPattern + arra_i * 8 + 4),
+                *(pPattern + arra_i * 8 + 5),
+                *(pPattern + arra_i * 8 + 6),
+                *(pPattern + arra_i * 8 + 7),
+            };
+            int arraCount = 0;
 		
-		for(int i=0;i<atoms;i++){
-			if(atom[i] == NULL) continue;
-			if(atom[i]->getGroup() == group_i){
-				arra[atom[i]->atomnum]--;
-			}
-		}
-		for(int i=0;i<8;i++){
-			if(arra[i] == 0){
-				arraCount++;
-			}
-		}
-		if(arraCount == 8){
-			atomCondition--;
-            for(int i=0;i<3;i++){
-                nowSkillTrun[i]--;
+            for(int i=0;i<atoms;i++){
+                if(atom[i] == NULL) continue;
+                if(atom[i]->getGroup() == group_i){
+                    arra[atom[i]->atomnum]--;
+                }
             }
+            for(int i=0;i<8;i++){
+                if(arra[i] == 0){
+                    arraCount++;
+                }
+            }
+            if(arraCount == 8){
+                if(arra_i == conditionType){
+                    condition--;
+                }
+                for(int i=0;i<3;i++){
+                    nowSkillTrun[i]--;
+                }
             
-			for(int i=0;i<atoms;i++){
-				if(atom[i] == NULL) continue;
-				if(atom[i]->getGroup() == group_i){
-					atom[i]->removeFromParentAndCleanup(true);
-					atom[i] = NULL;
+                for(int i=0;i<atoms;i++){
+                    if(atom[i] == NULL) continue;
+                    if(atom[i]->getGroup() == group_i){
+                        atom[i]->removeFromParentAndCleanup(true);
+                        atom[i] = NULL;
 					
-				}
-			}
-            for(int line_i=0;line_i<lines;line_i++){
-                keepLineStartPos[line_i] = Vec2(-1,-1);
-                keepLineGoalPos[line_i] = Vec2(-1,-1);
+                    }
+                }
+                for(int line_i=0;line_i<lines;line_i++){
+                    keepLineStartPos[line_i] = Vec2(-1,-1);
+                    keepLineGoalPos[line_i] = Vec2(-1,-1);
+                }
+                groupReset();
             }
-            groupReset();
-		}
+        }
 	}
 	
 	//条件を達成したらシーン遷移
-	if(atomCondition == 0){
+	if(condition == 0){
 		//ここにシーン遷移
 		log("Claer!!");
 		if (flag == 0) {
@@ -425,7 +432,7 @@ void PuzzleScene::update(float delta)
 		}
 	}
 	
-	String *str = String::createWithFormat("%d",atomCondition);
+	String *str = String::createWithFormat("%d",condition);
 	conditionLabel->setString(str->getCString());
 	
 	//Trueならタイマーを減らす

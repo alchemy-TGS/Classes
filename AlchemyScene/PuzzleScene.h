@@ -23,7 +23,8 @@ private:
 	
 	//条件表示関連
 	LabelTTF* conditionLabel;
-	int atomCondition;
+	int condition;
+    HomunNum conditionType;
 	
 	//タイマー関連
 	CCLabelTTF* timerlabel;
