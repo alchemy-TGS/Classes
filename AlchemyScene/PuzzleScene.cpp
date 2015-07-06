@@ -101,9 +101,9 @@ bool PuzzleScene::init() {
     //パーティホムンの初期化　　userDefault（？）で、もってくればいいか？
     HomunData* homunData = HomunData::getInstance();
     
-    partyHomun[0] = HOMUN_H2;
-	partyHomun[1] = HOMUN_H2O;
-    partyHomun[2] = HOMUN_H2O2;
+    partyHomun[0] = HOMUN_C2H5OH;
+	partyHomun[1] = HOMUN_H2;
+    partyHomun[2] = HOMUN_NULL;
     nowSkillTrun[0] = homunData->getSkillTrun(partyHomun[0]);
     nowSkillTrun[1] = homunData->getSkillTrun(partyHomun[1]);
     nowSkillTrun[2] = homunData->getSkillTrun(partyHomun[2]);
@@ -321,6 +321,18 @@ AtomNum PuzzleScene::popAtomSelect(){
     return ATOM_H;
 }
 
+bool PuzzleScene::bondCountCheck(int group){
+    for(int i=0;i<atoms;i++){
+        if(atom[i] == NULL) continue;
+        if(atom[i]->getGroup() == group){
+            if(atom[i]->bondCount != 0){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 void PuzzleScene::update(float delta)
 {
 	//画面のサイズを取得
@@ -383,6 +395,10 @@ void PuzzleScene::update(float delta)
                 *(pPattern + arra_i * 8 + 6),
                 *(pPattern + arra_i * 8 + 7),
             };
+            
+            for(int i=0;i<8;i++){
+                log("%d",*(pPattern + arra_i * 8+i));
+            }
             int arraCount = 0;
 		
             for(int i=0;i<atoms;i++){
@@ -397,26 +413,28 @@ void PuzzleScene::update(float delta)
                 }
             }
             if(arraCount == 8){
-                if(arra_i == conditionType){
-                    condition--;
-                }
-                for(int i=0;i<3;i++){
-                    nowSkillTrun[i]--;
-                }
-            
-                for(int i=0;i<atoms;i++){
-                    if(atom[i] == NULL) continue;
-                    if(atom[i]->getGroup() == group_i){
-                        atom[i]->removeFromParentAndCleanup(true);
-                        atom[i] = NULL;
-					
+                if(bondCountCheck(group_i)){
+                    if(arra_i == conditionType){
+                        condition--;
                     }
+                    for(int i=0;i<3;i++){
+                        nowSkillTrun[i]--;
+                    }
+            
+                    for(int i=0;i<atoms;i++){
+                        if(atom[i] == NULL) continue;
+                        if(atom[i]->getGroup() == group_i){
+                            atom[i]->removeFromParentAndCleanup(true);
+                            atom[i] = NULL;
+					
+                        }
+                    }
+                    for(int line_i=0;line_i<lines;line_i++){
+                        keepLineStartPos[line_i] = Vec2(-1,-1);
+                        keepLineGoalPos[line_i] = Vec2(-1,-1);
+                    }
+                    groupReset();
                 }
-                for(int line_i=0;line_i<lines;line_i++){
-                    keepLineStartPos[line_i] = Vec2(-1,-1);
-                    keepLineGoalPos[line_i] = Vec2(-1,-1);
-                }
-                groupReset();
             }
         }
 	}
@@ -570,7 +588,7 @@ void PuzzleScene::onTouchEnded(Touch *touch, Event *event)
 			//	atom[i] = NULL;
 			if(drawlineFlag){
 				lineGoalPosision  = atom[i]->atom->getPosition();
-                if(keepAtom->bondCount > 0 && atom[i]->bondCount > 0){
+                if(keepAtom->bondCount > 0 && atom[i]->bondCount > 0 && atom[i]->getInitialGroup() != keepAtom->getInitialGroup()){
                     setGroup(atom[i]->getGroup(),keepAtomGroup);
                     keepAtom->bondCount--;
                     atom[i]->bondCount--;
@@ -584,7 +602,13 @@ void PuzzleScene::onTouchEnded(Touch *touch, Event *event)
                     }
 				}
 			}
-            if(groupResetFlag) groupReset();
+            if(groupResetFlag) {
+                groupReset();
+                for(int line_i=0;line_i<lines;line_i++){
+                    keepLineStartPos[line_i] = Vec2(-1,-1);
+                    keepLineGoalPos[line_i] = Vec2(-1,-1);
+                }
+            }
 		}
 	}
     

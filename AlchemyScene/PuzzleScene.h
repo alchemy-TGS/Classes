@@ -56,6 +56,7 @@ private:
 	bool popPosCheck(int num, int x, int y);
     //生成する原子選択
     AtomNum popAtomSelect();
+    bool bondCountCheck(int group);
     
     //グループ解除関数
     bool groupResetFlag;
