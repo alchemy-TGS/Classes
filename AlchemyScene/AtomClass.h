@@ -32,6 +32,7 @@ public:
 	bool isTapped(Point point);
 	
 	int getGroup();
+    int getInitialGroup();
 	void setGroup(int setgroup);
 	void groupReset();
 	void bondCountReset();

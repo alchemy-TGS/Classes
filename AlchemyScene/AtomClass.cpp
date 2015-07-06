@@ -98,6 +98,12 @@ bool Atom::isTapped(Point point)
 	return tapped;
 }
 
+int Atom::getInitialGroup()
+{
+    return initialGroup;
+}
+
+
 int Atom::getGroup()
 {
 	return group;
