@@ -8,6 +8,8 @@
 #include "TownScene.h"
 #include "AlchemyScene.h"
 #include "HomeScene.h"
+#include "DebugScene.h"
+
 class HomeScene : public cocos2d::Layer
 {
 public:

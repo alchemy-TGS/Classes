@@ -14,8 +14,15 @@ bool DebugScene::init()
 	if ( !Layer::init() ){return false;}
 	
 	return true;
+	
+	auto view = Director::getInstance()->getOpenGLView();
+	auto size = view->getFrameSize();
+	
+	BtnSet(size.width, size.height);
 }
 
-void DebugScene::BtnSet(){
+void DebugScene::BtnSet(int winWidth, int winHeight){
+	
+
 	
 }

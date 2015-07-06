@@ -24,7 +24,7 @@ std::string skillImage[] = {
 	"HomunImg/CO2/CO2_Card_big.png",
 	"HomunImg/C2H5OH/C2H5OH_Card_big.png",
 	"",
-    "",
+    "HomunImg/NH3/NH3_Card_big/png",
 };
 
 

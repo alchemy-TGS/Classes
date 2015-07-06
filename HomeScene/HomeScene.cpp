@@ -28,7 +28,7 @@ void HomeScene::initBackGround(float winWidth, float winHeight){
 	backGround->setColor(Color3B(188, 226, 232));
 	backGround->setPosition(Point(winWidth / 2, winHeight / 2));
 	addChild(backGround, ZOrder::backGround);
-}
+	}
 
 void HomeScene::initFotterBtn(float winWidth, float winHeight){
 	
@@ -151,7 +151,7 @@ void HomeScene::fotter_Quest_Push(Ref* pSender){
 
 void HomeScene::fotter_Town_Push(Ref* pSender){
 	
-	auto nextScene = TownScene::createScene();
+	auto nextScene = DebugScene::createScene();
 	auto pScene = TransitionProgressInOut::create(0.5f, nextScene);
 	Director::getInstance()->replaceScene(pScene);
 }

@@ -9,7 +9,7 @@ public:
 	static cocos2d::Scene* createScene();
 	virtual bool init();
 	
-	void BtnSet();
+	void BtnSet(int winWidth, int winHeight);
 	
 	
 	CREATE_FUNC(DebugScene);
