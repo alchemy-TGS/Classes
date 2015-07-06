@@ -22,6 +22,7 @@ bool PuzzleScene::init() {
 	auto size = view->getFrameSize();
 	
 	colorChangeFrag = false;
+    groupResetFlag = false;
     
     
     
@@ -101,8 +102,8 @@ bool PuzzleScene::init() {
     HomunData* homunData = HomunData::getInstance();
     
     partyHomun[0] = HOMUN_H2;
-	partyHomun[1] = HOMUN_O2;
-    partyHomun[2] = HOMUN_NULL;
+	partyHomun[1] = HOMUN_H2O;
+    partyHomun[2] = HOMUN_H2O2;
     nowSkillTrun[0] = homunData->getSkillTrun(partyHomun[0]);
     nowSkillTrun[1] = homunData->getSkillTrun(partyHomun[1]);
     nowSkillTrun[2] = homunData->getSkillTrun(partyHomun[2]);
@@ -485,21 +486,19 @@ bool PuzzleScene::onTouchBegan(Touch *touch, Event *event)
 	for(int i=0;i<atoms;i++){
 		if(atom[i] == NULL) continue;
 		if(atom[i]->isTapped(touchPoint)){
-			//タップされたら削除する
-			//			atom[i]->atom->removeFromParentAndCleanup(true);
-			//			atom[i] = NULL;
-			
-			log("%d",atom[i]->getGroup());
-			drawlineFlag = true;
-			keepAtomGroup = atom[i]->getGroup();
-			keepAtom = atom[i];
-			lineStartPosision = atom[i]->atom->getPosition();
-			lineGoalPosision  = atom[i]->atom->getPosition();
-			
-			//log("%d",i);
+            if(atom[i]->bondCount > 0){
+                drawlineFlag = true;
+                keepAtomGroup = atom[i]->getGroup();
+                keepAtom = atom[i];
+                lineStartPosision = atom[i]->atom->getPosition();
+                lineGoalPosision  = atom[i]->atom->getPosition();
+			}
+            else
+            {
+                groupResetFlag = true;
+            }
 		}
-		//		log("atomposi:%d,%d",atom[i]->getPositionX(),atom[i]->getPositionY());
-	}
+    }
 	
 	
 	
@@ -571,6 +570,33 @@ void PuzzleScene::onTouchEnded(Touch *touch, Event *event)
 			//	atom[i] = NULL;
 			if(drawlineFlag){
 				lineGoalPosision  = atom[i]->atom->getPosition();
+                if(keepAtom->bondCount > 0 && atom[i]->bondCount > 0){
+                    setGroup(atom[i]->getGroup(),keepAtomGroup);
+                    keepAtom->bondCount--;
+                    atom[i]->bondCount--;
+                    //atom[i]->setGroup(keepAtomGroup);
+                    for(int line_i=0;line_i<lines;line_i++){
+                        if(keepLineStartPos[line_i] == Vec2(-1,-1)){
+                            keepLineStartPos[line_i] = lineStartPosision;
+                            keepLineGoalPos[line_i] = lineGoalPosision;
+                            break;
+                        }
+                    }
+				}
+			}
+            if(groupResetFlag) groupReset();
+		}
+	}
+    
+    groupResetFlag = false;
+    
+/*
+    for(int i=0;i<atoms;i++){
+		if(atom[i] == NULL) continue;
+		if(atom[i]->isTapped(touchPoint)){
+			//	atom[i] = NULL;
+			if(drawlineFlag){
+				lineGoalPosision  = atom[i]->atom->getPosition();
 				
 				if(keepAtomGroup == atom[i]->getGroup()){
 					groupReset();
@@ -594,11 +620,10 @@ void PuzzleScene::onTouchEnded(Touch *touch, Event *event)
 					}
 				}
 			}
-			
-			log("%d",i);
 		}
-		//		log("atomposi:%d,%d",atom[i]->getPositionX(),atom[i]->getPositionY());
 	}
+*/
+    
 	//lineNodeの頂点を全削除
 	lineNode->clear();
 	lineStartPosision = Vec2(-1,-1);

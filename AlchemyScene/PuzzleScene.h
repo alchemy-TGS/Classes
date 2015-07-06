@@ -58,6 +58,7 @@ private:
     AtomNum popAtomSelect();
     
     //グループ解除関数
+    bool groupResetFlag;
 	void groupReset();
     
     //グループ化関数
