@@ -13,18 +13,6 @@ std::string name[] = {
 	"AlchemyImg/Char/char_O.png",
 };
 
-
-int bondCount[] = {
-	1,
-	0,
-	1,
-	2,
-	5,
-	4,
-	3,
-	2,
-};
-
 std::string image[] = {
 	"AlchemyImg/AtomImg/atom_01.png",
 	"AlchemyImg/AtomImg/atom_02.png",
@@ -39,6 +27,45 @@ std::string image[] = {
 std::string safeImage  = "AlchemyImg/BondImg/bond_01.png";
 std::string pinchImage = "AlchemyImg/BondImg/bond_02.png";
 
+
+int bondCount[] = {
+	1,
+	0,
+	1,
+	2,
+	5,
+	4,
+	3,
+	2,
+};
+
+int destroyPattern[8][8] = {
+    //  H   He  li  Be  B   C   N   O   last
+    {
+        2,  0,  0,  0,  0,  0,  0,  0,
+    },
+    {
+        0,  0,  0,  0,  0,  0,  0,  2,
+    },
+    {
+        2,  0,  0,  0,  0,  0,  0,  1,
+    },
+    {
+        2,  0,  0,  0,  0,  0,  0,  2,
+    },
+    {
+        0,  0,  0,  0,  0,  -1, 0,  0, //C単体て消したらまずいので解なし
+    },
+    {
+        0,  0,  0,  0,  0,  1,  0,  2,
+    },
+    {
+        0,  0,  0,  0,  0,  0,  2,  0,
+    },
+    {
+        3,  0,  0,  0,  0,  0,  1,  0,
+    },
+};
 
 AtomData* AtomData::mAtomData = NULL;
 AtomData* AtomData::getInstance()
@@ -77,4 +104,8 @@ std::string AtomData::GetSafeBondImageName()
 std::string AtomData::GetPinchBondImageName()
 {
 	return pinchImage;
+}
+int* AtomData::GetDestroyPattern()
+{
+    return *destroyPattern;
 }

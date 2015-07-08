@@ -27,6 +27,14 @@ protected:
 		TAG_R_TALKING_HOMUN,
 	};
 	
+	enum AnimationListNum{
+		ANIMATION_NULL = -1,
+		ANIMATION_IDLING,
+		ANIMATION_HOMUN_SCALE_BIG,
+		ANIMATION_HOMUN_SCALE_MIDIUM,
+		ANIMATION_HOMUN_SCALE_LITTLE,
+	};
+
 public:
 	static cocos2d::Scene* createScene();
 	virtual bool init();
@@ -39,11 +47,13 @@ public:
 	//	画像の変更（ホムンの表情を変える）
 	//	homunNumはホムンの種類		faceNumは表情の種類
 	//	１通常、２笑顔、３怒り、４困る
-	void charChange(Tag tag, HomunNum homunNum, FaceNum faceNum);
+	void charChange(cocos2d::Sprite* spr, HomunNum homunNum, FaceNum faceNum);
 	
-	void emotionIconChange(Tag tag, EmotionNum emotionNum);
+	void emotionIconChange(cocos2d::Sprite* spr, EmotionNum emotionNum);
 	//	トークイベント
 	void talkEvent(int winWidth, int winHeight);
+	
+	void animationManager(cocos2d::Sprite*spr, AnimationListNum animationListNum);
 	
 	CREATE_FUNC(AlchemyScene);
 };

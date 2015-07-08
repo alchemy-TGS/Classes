@@ -15,15 +15,16 @@ private:
 	static const int atoms = 10;
 	Atom *atom[atoms];
 	
-    
+	
 	//ゲーム中にしようするホムン　最大３
-    HomunNum partyHomun[3];
-    int nowSkillTrun[3];
+	HomunNum partyHomun[3];
+	int nowSkillTrun[3];
 	
 	
 	//条件表示関連
 	LabelTTF* conditionLabel;
-	int atomCondition;
+	int condition;
+	HomunNum conditionType;
 	
 	//タイマー関連
 	CCLabelTTF* timerlabel;
@@ -50,16 +51,18 @@ private:
 	int keepAtomGroup;
 	Atom *keepAtom;
 	
-    
-    //重なりチェック関数
+	
+	//重なりチェック関数
 	bool popPosCheck(int num, int x, int y);
-    //生成する原子選択
-    AtomNum popAtomSelect();
-    
-    //グループ解除関数
+	//生成する原子選択
+	AtomNum popAtomSelect();
+	bool bondCountCheck(int group);
+	
+	//グループ解除関数
+	bool groupResetFlag;
 	void groupReset();
-    
-    //グループ化関数
+	
+	//グループ化関数
 	void setGroup(int set,int sett);
 	
 	
@@ -75,15 +78,15 @@ public:
 	void update(float delta);
 	
 	//	Cardが押された時
-    void CardEffect(int cardnum);
+	void CardEffect(int cardnum);
 	void Card1PushCallBack(Ref *pSender);
-    void Card2PushCallBack(Ref* pSender);
-    void Card3PushCallBack(Ref *pSender);
+	void Card2PushCallBack(Ref* pSender);
+	void Card3PushCallBack(Ref *pSender);
 	//	制限時間に合わせてヘッダーの色を変える
 	void timeColorChange();
 	bool colorChangeFrag;
 	int flag;
-		
+	
 	CREATE_FUNC(PuzzleScene);
 	
 };

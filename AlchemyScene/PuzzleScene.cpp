@@ -22,6 +22,7 @@ bool PuzzleScene::init() {
 	auto size = view->getFrameSize();
 	
 	colorChangeFrag = false;
+    groupResetFlag = false;
     
     
     
@@ -100,9 +101,9 @@ bool PuzzleScene::init() {
     //パーティホムンの初期化　　userDefault（？）で、もってくればいいか？
     HomunData* homunData = HomunData::getInstance();
     
-    partyHomun[0] = HOMUN_H2;
-	partyHomun[1] = HOMUN_O2;
-    partyHomun[2] = HOMUN_C2H5OH;
+    partyHomun[0] = HOMUN_C2H5OH;
+	partyHomun[1] = HOMUN_H2;
+    partyHomun[2] = HOMUN_O2;
     nowSkillTrun[0] = homunData->getSkillTrun(partyHomun[0]);
     nowSkillTrun[1] = homunData->getSkillTrun(partyHomun[1]);
     nowSkillTrun[2] = homunData->getSkillTrun(partyHomun[2]);
@@ -155,7 +156,9 @@ bool PuzzleScene::init() {
 	 */
     
 	//条件の表示
-	atomCondition = 20;
+	condition = 20;
+    conditionType = HOMUN_H2O;
+    
 	conditionLabel = LabelTTF::create("", "Arial", int(size.height/12));
 	conditionLabel->setPosition(Point(header->getContentSize().width / 4 * 3,
 									  header->getPosition().y - (header->getContentSize().height / 5)));
@@ -171,7 +174,7 @@ bool PuzzleScene::init() {
 	//初期タイマーのセット
 	timeswitch = true;
 	nowTime = 120;			//秒
-	frameCount = 0;
+	frameCount = 0;     
 	
 	
 	//イベントリスナーを作成
@@ -318,6 +321,18 @@ AtomNum PuzzleScene::popAtomSelect(){
     return ATOM_H;
 }
 
+bool PuzzleScene::bondCountCheck(int group){
+    for(int i=0;i<atoms;i++){
+        if(atom[i] == NULL) continue;
+        if(atom[i]->getGroup() == group){
+            if(atom[i]->bondCount != 0){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 void PuzzleScene::update(float delta)
 {
 	//画面のサイズを取得
@@ -366,55 +381,66 @@ void PuzzleScene::update(float delta)
 	}
 	
 	
-	
+	auto atomData = AtomData::getInstance();
+    auto pPattern = atomData->GetDestroyPattern();
 	for(int group_i=0;group_i<atoms;group_i++){
-		int arra[] = {
-			2,
-			0,
-			0,
-			0,
-			0,
-			0,
-			0,
-			1,
-		};
-		int arraCount = 0;
-		
-		for(int i=0;i<atoms;i++){
-			if(atom[i] == NULL) continue;
-			if(atom[i]->getGroup() == group_i){
-				arra[atom[i]->atomnum]--;
-			}
-		}
-		for(int i=0;i<8;i++){
-			if(arra[i] == 0){
-				arraCount++;
-			}
-		}
-		if(arraCount == 8){
-			atomCondition--;
-            for(int i=0;i<3;i++){
-                nowSkillTrun[i]--;
-            }
+        for(int arra_i = 0;arra_i<8;arra_i++){
+            int arra[] = {
+                *(pPattern + arra_i * 8),
+                *(pPattern + arra_i * 8 + 1),
+                *(pPattern + arra_i * 8 + 2),
+                *(pPattern + arra_i * 8 + 3),
+                *(pPattern + arra_i * 8 + 4),
+                *(pPattern + arra_i * 8 + 5),
+                *(pPattern + arra_i * 8 + 6),
+                *(pPattern + arra_i * 8 + 7),
+            };
             
-			for(int i=0;i<atoms;i++){
-				if(atom[i] == NULL) continue;
-				if(atom[i]->getGroup() == group_i){
-					atom[i]->removeFromParentAndCleanup(true);
-					atom[i] = NULL;
-					
-				}
-			}
-            for(int line_i=0;line_i<lines;line_i++){
-                keepLineStartPos[line_i] = Vec2(-1,-1);
-                keepLineGoalPos[line_i] = Vec2(-1,-1);
+            for(int i=0;i<8;i++){
+                log("%d",*(pPattern + arra_i * 8+i));
             }
-            groupReset();
-		}
+            int arraCount = 0;
+		
+            for(int i=0;i<atoms;i++){
+                if(atom[i] == NULL) continue;
+                if(atom[i]->getGroup() == group_i){
+                    arra[atom[i]->atomnum]--;
+                }
+            }
+            for(int i=0;i<8;i++){
+                if(arra[i] == 0){
+                    arraCount++;
+                }
+            }
+            if(arraCount == 8){
+                if(bondCountCheck(group_i)){
+                    if(arra_i == conditionType){
+                        condition--;
+                    }
+                    for(int i=0;i<3;i++){
+                        nowSkillTrun[i]--;
+                    }
+            
+                    for(int i=0;i<atoms;i++){
+                        if(atom[i] == NULL) continue;
+                        if(atom[i]->getGroup() == group_i){
+                            atom[i]->removeFromParentAndCleanup(true);
+                            atom[i] = NULL;
+					
+                        }
+                    }
+                    for(int line_i=0;line_i<lines;line_i++){
+                        keepLineStartPos[line_i] = Vec2(-1,-1);
+                        keepLineGoalPos[line_i] = Vec2(-1,-1);
+                    }
+                    groupReset();
+                }
+            }
+        }
 	}
 	
 	//条件を達成したらシーン遷移
-	if(atomCondition == 0){
+	if(condition == 0){
 		//ここにシーン遷移
 		log("Claer!!");
 		if (flag == 0) {
@@ -425,7 +451,7 @@ void PuzzleScene::update(float delta)
 		}
 	}
 	
-	String *str = String::createWithFormat("%d",atomCondition);
+	String *str = String::createWithFormat("%d",condition);
 	conditionLabel->setString(str->getCString());
 	
 	//Trueならタイマーを減らす
@@ -478,21 +504,19 @@ bool PuzzleScene::onTouchBegan(Touch *touch, Event *event)
 	for(int i=0;i<atoms;i++){
 		if(atom[i] == NULL) continue;
 		if(atom[i]->isTapped(touchPoint)){
-			//タップされたら削除する
-			//			atom[i]->atom->removeFromParentAndCleanup(true);
-			//			atom[i] = NULL;
-			
-			log("%d",atom[i]->getGroup());
-			drawlineFlag = true;
-			keepAtomGroup = atom[i]->getGroup();
-			keepAtom = atom[i];
-			lineStartPosision = atom[i]->atom->getPosition();
-			lineGoalPosision  = atom[i]->atom->getPosition();
-			
-			//log("%d",i);
+            if(atom[i]->bondCount > 0){
+                drawlineFlag = true;
+                keepAtomGroup = atom[i]->getGroup();
+                keepAtom = atom[i];
+                lineStartPosision = atom[i]->atom->getPosition();
+                lineGoalPosision  = atom[i]->atom->getPosition();
+			}
+            else
+            {
+                groupResetFlag = true;
+            }
 		}
-		//		log("atomposi:%d,%d",atom[i]->getPositionX(),atom[i]->getPositionY());
-	}
+    }
 	
 	
 	
@@ -564,6 +588,39 @@ void PuzzleScene::onTouchEnded(Touch *touch, Event *event)
 			//	atom[i] = NULL;
 			if(drawlineFlag){
 				lineGoalPosision  = atom[i]->atom->getPosition();
+                if(keepAtom->bondCount > 0 && atom[i]->bondCount > 0 && atom[i]->getInitialGroup() != keepAtom->getInitialGroup()){
+                    setGroup(atom[i]->getGroup(),keepAtomGroup);
+                    keepAtom->bondCount--;
+                    atom[i]->bondCount--;
+                    //atom[i]->setGroup(keepAtomGroup);
+                    for(int line_i=0;line_i<lines;line_i++){
+                        if(keepLineStartPos[line_i] == Vec2(-1,-1)){
+                            keepLineStartPos[line_i] = lineStartPosision;
+                            keepLineGoalPos[line_i] = lineGoalPosision;
+                            break;
+                        }
+                    }
+				}
+			}
+            if(groupResetFlag) {
+                groupReset();
+                for(int line_i=0;line_i<lines;line_i++){
+                    keepLineStartPos[line_i] = Vec2(-1,-1);
+                    keepLineGoalPos[line_i] = Vec2(-1,-1);
+                }
+            }
+		}
+	}
+    
+    groupResetFlag = false;
+    
+/*
+    for(int i=0;i<atoms;i++){
+		if(atom[i] == NULL) continue;
+		if(atom[i]->isTapped(touchPoint)){
+			//	atom[i] = NULL;
+			if(drawlineFlag){
+				lineGoalPosision  = atom[i]->atom->getPosition();
 				
 				if(keepAtomGroup == atom[i]->getGroup()){
 					groupReset();
@@ -587,11 +644,10 @@ void PuzzleScene::onTouchEnded(Touch *touch, Event *event)
 					}
 				}
 			}
-			
-			log("%d",i);
 		}
-		//		log("atomposi:%d,%d",atom[i]->getPositionX(),atom[i]->getPositionY());
 	}
+*/
+    
 	//lineNodeの頂点を全削除
 	lineNode->clear();
 	lineStartPosision = Vec2(-1,-1);
