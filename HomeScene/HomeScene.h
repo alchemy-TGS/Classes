@@ -7,6 +7,7 @@
 #include "QuestScene.h"
 #include "TownScene.h"
 #include "AlchemyScene.h"
+#include "PuzzleScene.h"
 #include "HomeScene.h"
 #include "DebugScene.h"
 
