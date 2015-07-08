@@ -26,6 +26,14 @@ enum EmotionNum{
 	EMOTION_IDEA,
 };
 
+enum AnimetionListNum{
+	ANIMATION_NULL = -1,
+	ANIMATION_IDLING,
+	ANIMATION_HOMUN_SCALE_BIG,
+	ANIMATION_HOMUN_SCALE_MIDIUM,
+	ANIMATION_HOMUN_SCALE_LARGE,
+};
+
 class EventImgData{
 private:
 	static EventImgData* mEventImgData;

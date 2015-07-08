@@ -34,6 +34,5 @@ public:
 	std::string GetImageName(AtomNum atomnum);
 	std::string GetSafeBondImageName();
 	std::string GetPinchBondImageName();
-    int* GetDestroyPattern();
 };
 #endif /* defined(__Alchemy_TGS__AtomData__) */

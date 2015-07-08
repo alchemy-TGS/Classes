@@ -86,3 +86,4 @@ string EventImgData::getFaceImgPath(HomunNum homunNum, FaceNum faceNum){
 string EventImgData::getEmotionIconImagePath(EmotionNum emotionNum){
 	return emotionIconImagePath[emotionNum];
 }
+

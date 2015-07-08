@@ -23,8 +23,7 @@ private:
 	
 	//条件表示関連
 	LabelTTF* conditionLabel;
-	int condition;
-    HomunNum conditionType;
+	int atomCondition;
 	
 	//タイマー関連
 	CCLabelTTF* timerlabel;
@@ -56,10 +55,8 @@ private:
 	bool popPosCheck(int num, int x, int y);
     //生成する原子選択
     AtomNum popAtomSelect();
-    bool bondCountCheck(int group);
     
     //グループ解除関数
-    bool groupResetFlag;
 	void groupReset();
     
     //グループ化関数
