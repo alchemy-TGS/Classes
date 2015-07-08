@@ -37,7 +37,7 @@ void AlchemyScene::initGra(int winWidth, int winHeight){
 	auto L_Char = Sprite::create("HomunImg/Default.png");
 	L_Char->setPosition(Point(L_Char->getContentSize().width / 2,
 							  L_Char->getContentSize().height / 2));
-	this->addChild(L_Char, ZO_TALKING_HOMUN, TAG_R_TALKING_HOMUN);
+	this->addChild(L_Char, ZO_TALKING_HOMUN, TAG_L_TALKING_HOMUN);
 	
 	auto R_Char = Sprite::create("HomunImg/Default.png");
 	R_Char->setPosition(Point(winWidth - R_Char->getContentSize().width / 2,
@@ -45,8 +45,9 @@ void AlchemyScene::initGra(int winWidth, int winHeight){
 	this->addChild(R_Char, ZO_TALKING_HOMUN, TAG_R_TALKING_HOMUN);
 }
 
-void AlchemyScene::charChange(cocos2d::Sprite *spr, HomunNum homunNum, FaceNum faceNum){
+void AlchemyScene::charChange(Tag tag, HomunNum homunNum, FaceNum faceNum){
 	EventImgData* eventImgData = EventImgData::getInstance();
+	auto spr = (Sprite*)this->getChildByTag(tag);
 	Texture2D *tex = TextureCache::sharedTextureCache()->addImage(eventImgData->getFaceImgPath(homunNum, faceNum));
 	//	スプライトの画像を変更する
 	spr->setTexture(tex);
@@ -55,7 +56,7 @@ void AlchemyScene::charChange(cocos2d::Sprite *spr, HomunNum homunNum, FaceNum f
 void AlchemyScene::talkEvent(int winWidth, int winHeight){
 	auto L_Char = (Sprite*)this->getChildByTag(TAG_L_TALKING_HOMUN);
 	auto R_Char = (Sprite*)this->getChildByTag(TAG_R_TALKING_HOMUN);
-	
-	this->charChange(L_Char, HOMUN_O2, FACE_NORMAL);
-	this->charChange(R_Char, HOMUN_H2, FACE_NORMAL);
+
+	charChange(TAG_L_TALKING_HOMUN, HOMUN_O2, FACE_NORMAL);
+	charChange(TAG_R_TALKING_HOMUN, HOMUN_H2, FACE_NORMAL);
 }

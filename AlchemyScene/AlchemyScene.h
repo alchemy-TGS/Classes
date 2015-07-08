@@ -37,7 +37,7 @@ public:
 	//	画像の変更（ホムンの表情を変える）
 	//	homunNumはホムンの種類		faceNumは表情の種類
 	//	１通常、２笑顔、３怒り、４困る
-	void charChange(cocos2d::Sprite *spr, HomunNum homunNum, FaceNum faceNum);
+	void charChange(Tag tag, HomunNum homunNum, FaceNum faceNum);
 	
 	//	トークイベント
 	void talkEvent(int winWidth, int winHeight);
