@@ -27,16 +27,15 @@ public:
 	
 	bool init(AtomNum type, int groupnum);
 	void update(float delta);
-	//CREATE_FUNC(AtomData);
+	
+	//  CREATE_FUNC(AtomData);
 	
 	bool isTapped(Point point);
-	
 	int getGroup();
 	int getInitialGroup();
 	void setGroup(int setgroup);
 	void groupReset();
 	void bondCountReset();
-	
 };
 
 

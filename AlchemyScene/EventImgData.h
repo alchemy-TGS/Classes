@@ -27,7 +27,6 @@ enum EmotionNum{
 };
 
 
-
 class EventImgData{
 private:
 	static EventImgData* mEventImgData;
@@ -36,6 +35,7 @@ public:
 	
 	std::string getFaceImgPath(HomunNum homunNum, FaceNum faceNum);
 	std::string getEmotionIconImagePath(EmotionNum emotionNum);
+	std::string getTalkLists(int talkNo);
 };
 
 #endif /* defined(__Alchemy_TGS__EventImgData__) */

@@ -71,6 +71,25 @@ string emotionIconImagePath[] = {
 	"SystemImg/IconImg/idea.png",
 };
 
+string TalkLists[] = {
+	"なあなあー",
+	"何よ？",
+	"喉乾いた",
+	"そのくらい自分で\n何とかしなさいよ！",
+	"えー。店がないから\nすぐ飲めないじゃないか",
+	"……私も飲み物が欲しくなったわ",
+	"お！俺、スポドリ！",
+	"全く……あ、",
+	"なんだ？",
+	"作るしかないわね",
+	"作る？",
+	"私達なら、真水は作れるわ",
+	"そういえばそうだな",
+	"んじゃ、",
+	"錬金スタート！",
+};
+
+
 EventImgData* EventImgData::mEventImgData = NULL;
 EventImgData* EventImgData::getInstance(){
 	if (mEventImgData == NULL) {
@@ -85,4 +104,8 @@ string EventImgData::getFaceImgPath(HomunNum homunNum, FaceNum faceNum){
 
 string EventImgData::getEmotionIconImagePath(EmotionNum emotionNum){
 	return emotionIconImagePath[emotionNum];
+}
+
+string EventImgData::getTalkLists(int talkNo){
+	return TalkLists[talkNo];
 }

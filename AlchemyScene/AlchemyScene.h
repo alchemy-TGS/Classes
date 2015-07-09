@@ -6,7 +6,6 @@
 //#include "PuzzleScene.h"
 #include "TItleScene.h"
 #include "EventImgData.h"
-
 class AlchemyScene : public cocos2d::Layer
 {
 protected:
@@ -14,6 +13,7 @@ protected:
 		ZOrder_NULL = -1,
 		ZO_BACKGROUND,
 		ZO_BALLOON,
+		ZO_TALKING_CHAR,
 		ZO_TALKING_HOMUN,
 		ZO_EMOTION_ICON,
 	};
@@ -21,6 +21,7 @@ protected:
 		TAG_NULL = -1,
 		TAG_BackGround,
 		TAG_BALLOON,
+		TAG_TALKING_CHAR,
 		TAG_L_EMOTION_ICON,
 		TAG_R_EMOTION_ICON,
 		TAG_L_TALKING_HOMUN,
@@ -34,12 +35,18 @@ protected:
 		ANIMATION_HOMUN_SCALE_MIDIUM,
 		ANIMATION_HOMUN_SCALE_LITTLE,
 	};
+	enum HomunNo{
+		Homun_NULL = -1,
+		Homun_H2,
+		Homun_O2,
+	};
 
 public:
 	static cocos2d::Scene* createScene();
 	virtual bool init();
 	
 	EventImgData* eventImgData = EventImgData::getInstance();
+	
 	
 	//	画像の初期設置
 	void initGra(int winWidth, int winHeight);
@@ -53,8 +60,13 @@ public:
 	//	トークイベント
 	void talkEvent(int winWidth, int winHeight);
 	
+	int tapCounter;
+	
 	void animationManager(cocos2d::Sprite*spr, AnimationListNum animationListNum);
 	
+	void talkNowColor(cocos2d::Sprite* spr);
+	
+	void balloonColorChange(HomunNo homunNo);
 	CREATE_FUNC(AlchemyScene);
 };
 

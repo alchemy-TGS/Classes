@@ -136,8 +136,8 @@ void HomeScene::fotter_Homun_Push(Ref* pSender){
 
 void HomeScene::fotter_Alchemy_Push(Ref* pSender){
 	
-	auto nextScene = PuzzleScene::createScene();
-	auto pScene = TransitionSlideInR::create(0.5f, nextScene);
+	auto nextScene = PuzzleChooseScene::createScene();
+	auto pScene = TransitionSlideInT::create(0.5f, nextScene);
 	Director::getInstance()->replaceScene(pScene);
 	
 }

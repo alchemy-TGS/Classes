@@ -29,18 +29,51 @@ void TitleScene::btnCreate(){
 	
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-	
-	Rect bgRect = Rect(0, 0, visibleSize.width, visibleSize.height);
-	auto bg = Sprite::create();
-	bg->setTextureRect(bgRect);
-	bg->setColor(Color3B(158, 196, 202));
+		auto bg = Sprite::create("SystemImg/title_bg.png");
 	bg->setPosition(visibleSize.width / 2, visibleSize.height / 2);
 	this->addChild(bg);
 	
-	auto bgCharactor = Sprite::create("HomunImg/H2/H2_Card_big.png");
+	auto bgCharactor = Sprite::create("SystemImg/title_homun.png");
 	bgCharactor->setPosition(visibleSize.width/2,visibleSize.height/2);
 	this->addChild(bgCharactor);
+	bgCharactor->runAction(RepeatForever::create(Sequence::create(ScaleTo::create(1.2, 1.01, 0.99),
+																  ScaleTo::create(1.2, 1),
+																  ScaleTo::create(1.2, 0.99, 1.01),
+																  ScaleTo::create(1.2, 1),
+																  NULL)));
+	bg->setZOrder(0);
+	bgCharactor->setZOrder(1);
+	Sprite* Title = Sprite::create("SystemImg/title.png");
+	Title->setPosition(Point(visibleSize.width / 2, visibleSize.height / 5));
+	addChild(Title);
+	Title->setScale(1.3);
+	Title->runAction(RepeatForever::create(Sequence::create(ScaleTo::create(1.2, 1.31),
+															ScaleTo::create(1.2, 1.39),
+															NULL)));
+	Title->setZOrder(2);
 	
+	Sprite* tapChar = Sprite::create("SystemImg/title_tap.png");
+	tapChar->setPosition(Point(visibleSize.width / 2, visibleSize.height / 15));
+	addChild(tapChar);
+	tapChar->setZOrder(3);
+	
+	tapChar->runAction(RepeatForever::create(Sequence::create(JumpBy::create(0.6, Vec2(0, 0), 32, 2),
+															  DelayTime::create(3),
+															  NULL)));
+	Sprite* tapAreaSpr = Sprite::create();
+	tapAreaSpr->setContentSize(visibleSize);
+	MenuItemSprite* tapArea = MenuItemSprite::create(tapAreaSpr,tapAreaSpr,[](Ref*sender){
+		auto nextScene = HomeScene::createScene();
+		auto pScene = TransitionProgressInOut::create(0.5f, nextScene);
+		Director::getInstance()->replaceScene(pScene);
+		SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
+	});
+	tapArea->setPosition(visibleSize/2);
+	auto tapMenu = Menu::create(tapArea ,NULL);
+	tapMenu->setPosition(Point::ZERO);
+	this->addChild(tapMenu);
+	
+	/*
 	//ボタンの大きさを設定
 	Rect toHomeBtnRect = Rect(0, 0, visibleSize.height / 4, visibleSize.width / 8);
 	
@@ -70,6 +103,7 @@ void TitleScene::btnCreate(){
 	bgCharactor->setZOrder(1);
 	toHomeBtnMenu->setZOrder(2);
 	toHomeBtnLavel->setZOrder(3);
+	 */
 }
 
 void TitleScene::toHomeBtn(Ref *pSender){

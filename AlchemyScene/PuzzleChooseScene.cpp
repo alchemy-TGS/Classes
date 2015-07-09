@@ -22,12 +22,6 @@ bool PuzzleChooseScene::init()
 	initGra(size.width, size.height);
 	initBtn(size.width, size.height);
 	
-	Sprite* test = Sprite::create("HomunImg/NH3/NH3_Card_SD_smile.png");
-	test->setPosition(size.width / 2, size.height / 2);
-	addChild(test);
-	test->setScale(0);
-	test->runAction(EaseBackOut::create(ScaleTo::create(0.5f, 1)));
-	test->runAction(RepeatForever::create(Sequence::create(ScaleTo::create(1.2, 1.1), ScaleTo::create(1.2, 0.9), NULL)));
 	return true;
 }
 
@@ -55,7 +49,7 @@ void PuzzleChooseScene::initBtn(int winWidth, int winHeight){
 			case ui::Widget::TouchEventType::BEGAN:
 				break;
 			case ui::Widget::TouchEventType::ENDED:{
-				auto nextScene = PuzzleScene::createScene();
+				auto nextScene = AlchemyScene::createScene();
 				auto pScene = TransitionFade::create(0.5f, nextScene);
 				Director::getInstance()->replaceScene(pScene);
 			}
