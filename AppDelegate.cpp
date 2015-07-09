@@ -1,5 +1,6 @@
 #include "AppDelegate.h"
 #include "TItleScene.h"
+#include "PuzzleChooseScene.h"
 #include <iostream>
 USING_NS_CC;
 

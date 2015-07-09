@@ -23,7 +23,14 @@ bool PuzzleScene::init() {
 	
 	colorChangeFrag = false;
     groupResetFlag = false;
-    
+	
+	auto backGround = Sprite::create();
+	Rect backGroundRect = Rect(0, 0, size.width, size.height);
+	backGround->setTextureRect(backGroundRect);
+	backGround->setColor(Color3B(178, 216, 222));
+	backGround->setPosition(Point(size.width / 2, size.height / 2));
+	addChild(backGround, 0);
+
     
     
 	//ヘッダー
@@ -101,9 +108,9 @@ bool PuzzleScene::init() {
     //パーティホムンの初期化　　userDefault（？）で、もってくればいいか？
     HomunData* homunData = HomunData::getInstance();
     
-    partyHomun[0] = HOMUN_C2H5OH;
-	partyHomun[1] = HOMUN_H2;
-    partyHomun[2] = HOMUN_O2;
+    partyHomun[0] = HOMUN_H2;
+	partyHomun[1] = HOMUN_O2;
+    partyHomun[2] = HOMUN_NH3;
     nowSkillTrun[0] = homunData->getSkillTrun(partyHomun[0]);
     nowSkillTrun[1] = homunData->getSkillTrun(partyHomun[1]);
     nowSkillTrun[2] = homunData->getSkillTrun(partyHomun[2]);
@@ -156,7 +163,7 @@ bool PuzzleScene::init() {
 	 */
     
 	//条件の表示
-	condition = 20;
+	condition = 10;
     conditionType = HOMUN_H2O;
     
 	conditionLabel = LabelTTF::create("", "Arial", int(size.height/12));
@@ -365,6 +372,10 @@ void PuzzleScene::update(float delta)
 											   posRandY + size.height/6 + size.height/16);
 				} while (popPosCheck(i,posRandX,posRandY));
 				addChild(atom[i]);
+				atom[i]->atom->setScale(0);
+				//atom[i]->atom->runAction(EaseBackOut::create(ScaleTo::create(0.5f, 1)));
+				atom[i]->atom->runAction(RepeatForever::create(Sequence::create(ScaleTo::create(1.2, 1.05), ScaleTo::create(1.2, 0.95), NULL)));
+
 				log("tootta");
 				break;
 			}

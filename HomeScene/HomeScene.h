@@ -10,10 +10,26 @@
 #include "PuzzleScene.h"
 #include "HomeScene.h"
 #include "DebugScene.h"
+#include "PuzzleChooseScene.h"
+#include "cocos-ext.h"
+USING_NS_CC_EXT;
 
 class HomeScene : public cocos2d::Layer
 {
+protected:
+	enum FotterTag{
+		TAG_NULL = -1,
+		TAG_HOME,
+		TAG_HOMUN,
+		TAG_ALCHEMY,
+		TAG_QUEST,
+		TAG_TOWN,
+	};
+private:
+	static HomeScene* mHomeScene;
 public:
+	static HomeScene* getInstance();
+
 	static cocos2d::Scene* createScene();
 	virtual bool init();
 	CREATE_FUNC(HomeScene);
@@ -24,8 +40,8 @@ public:
 		Fotter,
 	};
 	
-	void initBackGround(float winWidth, float winHeight);
-	void initFotterBtn(float winWidth, float winHeight);
+	void initBackGround(int winWidth, int winHeight);
+	void initFotterBtn(int winWidth, int winHeight);
 	
 	void FotterCreate(int winSizeWidth, int winSizeHeight);
 	void transitionScene(Ref* pSender);

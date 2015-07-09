@@ -6,13 +6,13 @@ USING_NS_CC;
 std::string homunImage[] = {
 	"AlchemyImg/Card/H2_Card_SD_Alchemy.png",
 	"AlchemyImg/Card/O2_Card_SD_Alchemy.png",
-	"",
+	"AlchemyImg/Card/H2O_Card_SD_Alchemy.png",
 	"AlchemyImg/Card/H2O2_Card_SD_Alchemy.png",
 	"AlchemyImg/Card/C_Card_SD_Alchemy.png",
-	"",
+	"AlchemyImg/Card/CO2_Card_SD_Alchemy.png",
 	"AlchemyImg/Card/C2H5OH_Card_SD_Alchemy.png",
 	"",
-    "",
+    "AlchemyImg/Card/NH3_Card_SD_Alchemy.png",
 };
 
 std::string skillImage[] = {

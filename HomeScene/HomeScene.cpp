@@ -21,7 +21,9 @@ bool HomeScene::init()
 	return true;
 }
 
-void HomeScene::initBackGround(float winWidth, float winHeight){
+
+
+void HomeScene::initBackGround(int winWidth, int winHeight){
 	auto backGround = Sprite::create();
 	Rect backGroundRect = Rect(0, 0, winWidth, winHeight);
 	backGround->setTextureRect(backGroundRect);
@@ -30,7 +32,7 @@ void HomeScene::initBackGround(float winWidth, float winHeight){
 	addChild(backGround, ZOrder::backGround);
 	}
 
-void HomeScene::initFotterBtn(float winWidth, float winHeight){
+void HomeScene::initFotterBtn(int winWidth, int winHeight){
 	
 	std::string fotterImgName[5]{
 		"SystemImg/FotterImg/fotter_Home.png",
@@ -57,7 +59,7 @@ void HomeScene::initFotterBtn(float winWidth, float winHeight){
 	auto fotterHomeItem = MenuItemSprite::create(homeSpr, homePushSpr,CC_CALLBACK_1(HomeScene::fotter_Home_Push, this));
 	auto fotterHomeMenu = Menu::create(fotterHomeItem, NULL);
 	fotterHomeMenu->setPosition(Point(winWidth / 2 -(fotterPosXHint * 5), fotterPosY));
-	this->addChild(fotterHomeMenu, HomeScene::ZOrder::Fotter, 10);
+	this->addChild(fotterHomeMenu, ZOrder::Fotter, TAG_HOME);
 	
 	
 	auto homunSpr = Sprite::create(fotterImgName[1]);
@@ -66,7 +68,7 @@ void HomeScene::initFotterBtn(float winWidth, float winHeight){
 	auto fotterhomunItem = MenuItemSprite::create(homunSpr, homunPushSpr,CC_CALLBACK_1(HomeScene::fotter_Homun_Push, this));
 	auto fotterhomunMenu = Menu::create(fotterhomunItem, NULL);
 	fotterhomunMenu->setPosition(Point(winWidth / 2 -(fotterPosXHint * 3), fotterPosY));
-	this->addChild(fotterhomunMenu, HomeScene::ZOrder::Fotter, 11);
+	this->addChild(fotterhomunMenu, ZOrder::Fotter, TAG_HOMUN);
 	
 	auto AlchemySpr = Sprite::create(fotterImgName[2]);
 	auto AlchemyPushSpr = Sprite::create(fotterImgName[2]);
@@ -74,7 +76,7 @@ void HomeScene::initFotterBtn(float winWidth, float winHeight){
 	auto fotterAlchemyItem = MenuItemSprite::create(AlchemySpr, AlchemyPushSpr,CC_CALLBACK_1(HomeScene::fotter_Alchemy_Push, this));
 	auto fotterAlchemyMenu = Menu::create(fotterAlchemyItem, NULL);
 	fotterAlchemyMenu->setPosition(Point(winWidth / 2, fotterPosY));
-	this->addChild(fotterAlchemyMenu, HomeScene::ZOrder::Fotter, 12);
+	this->addChild(fotterAlchemyMenu, ZOrder::Fotter, TAG_ALCHEMY);
 	
 	auto QuestSpr = Sprite::create(fotterImgName[3]);
 	auto QuestPushSpr = Sprite::create(fotterImgName[3]);
@@ -82,7 +84,7 @@ void HomeScene::initFotterBtn(float winWidth, float winHeight){
 	auto fotterQuestItem = MenuItemSprite::create(QuestSpr, QuestPushSpr,CC_CALLBACK_1(HomeScene::fotter_Quest_Push, this));
 	auto fotterQuestMenu = Menu::create(fotterQuestItem, NULL);
 	fotterQuestMenu->setPosition(Point(winWidth / 2 +(fotterPosXHint * 3), fotterPosY));
-	this->addChild(fotterQuestMenu, HomeScene::ZOrder::Fotter, 13);
+	this->addChild(fotterQuestMenu, ZOrder::Fotter, TAG_QUEST);
 	
 	auto TownSpr = Sprite::create(fotterImgName[4]);
 	auto TownPushSpr = Sprite::create(fotterImgName[4]);
@@ -90,7 +92,7 @@ void HomeScene::initFotterBtn(float winWidth, float winHeight){
 	auto fotterTownItem = MenuItemSprite::create(TownSpr, TownPushSpr,CC_CALLBACK_1(HomeScene::fotter_Town_Push, this));
 	auto fotterTownMenu = Menu::create(fotterTownItem, NULL);
 	fotterTownMenu->setPosition(Point(winWidth / 2 +(fotterPosXHint * 5), fotterPosY));
-	this->addChild(fotterTownMenu, HomeScene::ZOrder::Fotter, 14);
+	this->addChild(fotterTownMenu, ZOrder::Fotter, TAG_TOWN);
 	
 	
 	/*
@@ -116,7 +118,6 @@ void HomeScene::initFotterBtn(float winWidth, float winHeight){
 void HomeScene::transitionScene(Ref* pSender){
 	
 }
-
 void HomeScene::fotter_Home_Push(Ref* pSender){
 	
 	auto nextScene = HomeScene::createScene();
@@ -143,7 +144,7 @@ void HomeScene::fotter_Alchemy_Push(Ref* pSender){
 
 void HomeScene::fotter_Quest_Push(Ref* pSender){
 	
-	auto nextScene = QuestScene::createScene();
+	auto nextScene = PuzzleChooseScene::createScene();
 	auto pScene = TransitionProgressInOut::create(0.5f, nextScene);
 	Director::getInstance()->replaceScene(pScene);
 	
@@ -154,4 +155,13 @@ void HomeScene::fotter_Town_Push(Ref* pSender){
 	auto nextScene = AlchemyScene::createScene();
 	auto pScene = TransitionProgressInOut::create(0.5f, nextScene);
 	Director::getInstance()->replaceScene(pScene);
+}
+
+
+HomeScene* HomeScene::mHomeScene = NULL;
+HomeScene* HomeScene::getInstance(){
+	if (mHomeScene == NULL) {
+		mHomeScene = new HomeScene();
+	}
+	return mHomeScene;
 }
