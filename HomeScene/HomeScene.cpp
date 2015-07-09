@@ -144,7 +144,7 @@ void HomeScene::fotter_Alchemy_Push(Ref* pSender){
 
 void HomeScene::fotter_Quest_Push(Ref* pSender){
 	
-	auto nextScene = PuzzleChooseScene::createScene();
+	auto nextScene = AlchemyScene::createScene();
 	auto pScene = TransitionProgressInOut::create(0.5f, nextScene);
 	Director::getInstance()->replaceScene(pScene);
 	
@@ -152,7 +152,7 @@ void HomeScene::fotter_Quest_Push(Ref* pSender){
 
 void HomeScene::fotter_Town_Push(Ref* pSender){
 	
-	auto nextScene = AlchemyScene::createScene();
+	auto nextScene = TitleScene::createScene();
 	auto pScene = TransitionProgressInOut::create(0.5f, nextScene);
 	Director::getInstance()->replaceScene(pScene);
 }

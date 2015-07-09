@@ -105,7 +105,7 @@ bool PuzzleScene::init() {
 	
 	partyHomun[0] = HOMUN_H2;
 	partyHomun[1] = HOMUN_O2;
-	partyHomun[2] = HOMUN_NH3;
+	partyHomun[2] = HOMUN_CO2;
 	
 	nowSkillTrun[0] = homunData->getSkillTrun(partyHomun[0]);
 	nowSkillTrun[1] = homunData->getSkillTrun(partyHomun[1]);
