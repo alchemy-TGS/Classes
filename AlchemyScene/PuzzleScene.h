@@ -106,6 +106,9 @@ private:
 	
 	//クリア判定
 	void clearCheck();
+    
+    //ゲームオーバー処理
+    void gameOverCheck();
 	
 	//タイマー処理
 	void timerUpdate(float delta);
