@@ -72,38 +72,7 @@ void TitleScene::btnCreate(){
 	auto tapMenu = Menu::create(tapArea ,NULL);
 	tapMenu->setPosition(Point::ZERO);
 	this->addChild(tapMenu);
-	
-	/*
-	//ボタンの大きさを設定
-	Rect toHomeBtnRect = Rect(0, 0, visibleSize.height / 4, visibleSize.width / 8);
-	
-	auto toHomeSpr1 = Sprite::create();
-	toHomeSpr1->setTextureRect(toHomeBtnRect);
-	toHomeSpr1->setColor(Color3B(22, 94, 180));
-	
-	auto toHomeSpr2 = Sprite::create();
-	toHomeSpr2->setTextureRect(toHomeBtnRect);
-	toHomeSpr2->setColor(Color3B(33, 60, 99));
-	
-	auto toHomeBtnItem = MenuItemSprite::create(toHomeSpr1, toHomeSpr2, CC_CALLBACK_1(TitleScene::toHomeBtn, this));
-	auto toHomeBtnMenu = Menu::create(toHomeBtnItem, NULL);
-	
-	auto toHomeBtnLavel = Label::createWithSystemFont("Tap To Start!", "Arial", 64);
-	if (visibleSize.height == 1024)
-		toHomeBtnLavel->setScale(0.5f);
-	toHomeBtnLavel->setColor(Color3B::WHITE);
-	
-	addChild(toHomeBtnLavel);
-	
-	toHomeBtnMenu->setPosition(Point(visibleSize.width / 2, visibleSize.height / 10));
-	toHomeBtnLavel->setPosition(Point(visibleSize.width / 2, visibleSize.height / 10));
-	this->addChild(toHomeBtnMenu);
-	
-	bg->setZOrder(0);
-	bgCharactor->setZOrder(1);
-	toHomeBtnMenu->setZOrder(2);
-	toHomeBtnLavel->setZOrder(3);
-	 */
+
 }
 
 void TitleScene::toHomeBtn(Ref *pSender){

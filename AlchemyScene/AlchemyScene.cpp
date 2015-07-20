@@ -165,6 +165,9 @@ void AlchemyScene::talkEvent(int winWidth, int winHeight){
 		log("now talkNo: %d", tapCounter);
 			switch (tapCounter) {
 			case 0:{
+				//	todo:全部関数でまとめる　汚すぎ
+				//	テキストから読み込んで、セリフ表示、アニメーションなど出来るように
+				//	専用エディタを作る
 					// セリフの張替え
 					mes->setString(eventImgData->getTalkLists(tapCounter).c_str());
 					//	ホムンの張替え

@@ -288,7 +288,11 @@ void PuzzleScene::onTouchEnded(Touch *touch, Event *event)
 		if(atom[i]->isTapped(touchPoint)){
 			if(drawlineFlag){
 				lineGoalPosision  = atom[i]->atom->getPosition();
-				if(keepAtom->bondCount > 0 && atom[i]->bondCount > 0 && atom[i]->getInitialGroup() != keepAtom->getInitialGroup()){
+				
+				if(keepAtom->bondCount > 0 &&
+				   atom[i]->bondCount > 0 &&
+				   atom[i]->getInitialGroup() != keepAtom->getInitialGroup()){
+					
 					setGroup(atom[i]->getGroup(),keepAtomGroup);
 					keepAtom->bondCount--;
 					atom[i]->bondCount--;
@@ -397,6 +401,14 @@ void PuzzleScene::clearCheck(){
 }
 
 
+//ゲームオーバー判定
+void PuzzleScene::gameOverCheck(){
+	if(nowTime < 0){
+		//ここにGameOverScene
+		log("GameOver");
+	}
+}
+
 //原子生成処理
 void PuzzleScene::atomGenerate(float delta){
 	//画面のサイズを取得
@@ -456,9 +468,10 @@ void PuzzleScene::groupDelete(){
 				*(pPattern + arra_i * 8 + 7),
 			};
 			
-			for(int i=0;i<8;i++){
+			/*
+			 for(int i=0;i<8;i++){
 				log("%d",*(pPattern + arra_i * 8+i));
-			}
+			 }*/
 			int arraCount = 0;
 			
 			for(int i=0;i<atoms;i++){
@@ -492,6 +505,14 @@ void PuzzleScene::groupDelete(){
 					groupReset();
 				}
 			}
+			
+		}
+		
+		if(bondCountCheck(group_i)){
+			log("HUANTEI");
+			//結合不安定時の処理
+			//ここに結合が不安定時のエフェクトがあれば入れて下さい
+			groupReset();
 		}
 	}
 }
@@ -527,7 +548,8 @@ AtomNum PuzzleScene::popAtomSelect(){
 	for(int droprate_i = 0;*(droprate + droprate_i) != -1;droprate_i++){
 		for(int party_i =0;party_i<homuns;party_i++){
 			if(partyHomun[party_i] != HOMUN_NULL){
-				log("%d,%d",*(droprate + (partyHomun[party_i]*5) + droprate_i),count);
+				//log("%d,%d",*(droprate + (partyHomun[party_i]*5) + droprate_i),count);
+				
 				count -= *(droprate + partyHomun[party_i]*5 + droprate_i );
 				if(count < 0){
 					if(droprate_i == 0){
@@ -550,17 +572,26 @@ AtomNum PuzzleScene::popAtomSelect(){
 	return ATOM_H;
 }
 
-//分子の結合手が全て0になっているかの真偽を返します
+//引数のグループの原子の結合手が全て0になっているかの真偽を返します
 bool PuzzleScene::bondCountCheck(int group){
+	
+	bool checkPointFlag = false;
+	
 	for(int i=0;i<atoms;i++){
 		if(atom[i] == NULL) continue;
 		if(atom[i]->getGroup() == group){
-			if(atom[i]->bondCount != 0){
+			checkPointFlag = true;
+			if(atom[i]->bondCount > 0){
 				return false;
 			}
 		}
 	}
-	return true;
+	if(checkPointFlag){
+		return true;
+	}else{
+		return false;
+	}
+	
 }
 
 

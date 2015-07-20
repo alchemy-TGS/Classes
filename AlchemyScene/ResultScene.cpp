@@ -16,6 +16,7 @@ bool ResultScene::init()
 	auto view = Director::getInstance()->getOpenGLView();
 	auto size = view->getFrameSize();
 	
+	//	Clearの仮シーン。スコア表示や入手アイテムも表示。
 	
 	auto charactor = Sprite::create("HomunImg/C/C_Card_SD_smile.png");
 	charactor->setPosition(Point(size.width - charactor->getContentSize().width / 2, charactor->getContentSize().height / 2));

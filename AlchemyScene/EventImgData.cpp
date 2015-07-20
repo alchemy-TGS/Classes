@@ -3,6 +3,8 @@ USING_NS_CC;
 using namespace std;
 #include <iostream>
 
+//	1桁目に １通常、２笑顔、３怒り、４困るの感情
+//	2桁目に　ホムンの種類
 string homunFaceImgPath[] = {
 	"HomunImg/Default.png",
 	"HomunImg/H2/H2_Card_SD_normal.png",
@@ -98,10 +100,12 @@ EventImgData* EventImgData::getInstance(){
 	return mEventImgData;
 }
 
+//	homunNumはホムンの種類		faceNumは表情の種類
+//	１通常、２笑顔、３怒り、４困る
 string EventImgData::getFaceImgPath(HomunNum homunNum, FaceNum faceNum){
 	return homunFaceImgPath[10 * homunNum + faceNum];
 };
-
+//	感情アイコン画像
 string EventImgData::getEmotionIconImagePath(EmotionNum emotionNum){
 	return emotionIconImagePath[emotionNum];
 }
