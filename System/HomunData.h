@@ -16,18 +16,18 @@ enum HomunNum{
     HOMUN_C2H5OH,
     HOMUN_N2,
     HOMUN_NH3,
+    HOMUN_LAST_NUM,
 };
 
 class HomunData{
 private:
-	static HomunData* mHomunData;
-public:
-	static HomunData* getInstance();
     
-    int* GetDropRate();
-    std::string getImageName(HomunNum num);
-    std::string getSkillImageName(HomunNum num);
-    int getSkillTrun(HomunNum num);
+public:
+    
+    static int* GetDropRate();
+    static std::string getImageName(int num);
+    static std::string getSkillImageName(int num);
+    static int getSkillTrun(int num);
     //todo skillの効果を返し値or処理する方法を考える
 };
 

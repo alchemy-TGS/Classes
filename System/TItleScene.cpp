@@ -29,10 +29,12 @@ void TitleScene::btnCreate(){
 	
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-		auto bg = Sprite::create("SystemImg/title_bg.png");
+	
+    
+	auto bg = Sprite::create("SystemImg/title_bg.png");
 	bg->setPosition(visibleSize.width / 2, visibleSize.height / 2);
 	this->addChild(bg);
-	
+    
 	auto bgCharactor = Sprite::create("SystemImg/title_homun.png");
 	bgCharactor->setPosition(visibleSize.width/2,visibleSize.height/2);
 	this->addChild(bgCharactor);

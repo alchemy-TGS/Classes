@@ -49,7 +49,7 @@ void PuzzleChooseScene::initBtn(int winWidth, int winHeight){
 			case ui::Widget::TouchEventType::BEGAN:
 				break;
 			case ui::Widget::TouchEventType::ENDED:{
-				auto nextScene = AlchemyScene::createScene();
+				auto nextScene = HomunChooseScene::createScene();
 				auto pScene = TransitionFade::create(0.5f, nextScene);
 				Director::getInstance()->replaceScene(pScene);
 			}

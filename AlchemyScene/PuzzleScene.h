@@ -31,7 +31,7 @@ private:
 	Atom *atom[atoms];
 	
 	//ゲーム中に使用するホムン
-	HomunNum partyHomun[homuns];
+	int partyHomun[homuns];
 	int nowSkillTrun[homuns];
 	
 	//条件表示

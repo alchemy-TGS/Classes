@@ -101,19 +101,20 @@ bool PuzzleScene::init() {
 	
 	
 	//パーティホムンの初期化　　userDefault（？）で、もってくればいいか？
-	HomunData* homunData = HomunData::getInstance();
+    
+    auto savedata = CCUserDefault::getInstance();
+        
+	partyHomun[0] = savedata->getIntegerForKey("PartyHomun_0");
+	partyHomun[1] = savedata->getIntegerForKey("PartyHomun_1");
+	partyHomun[2] = savedata->getIntegerForKey("PartyHomun_2");
 	
-	partyHomun[0] = HOMUN_H2;
-	partyHomun[1] = HOMUN_O2;
-	partyHomun[2] = HOMUN_CO2;
+	nowSkillTrun[0] = HomunData::getSkillTrun(partyHomun[0]);
+	nowSkillTrun[1] = HomunData::getSkillTrun(partyHomun[1]);
+	nowSkillTrun[2] = HomunData::getSkillTrun(partyHomun[2]);
 	
-	nowSkillTrun[0] = homunData->getSkillTrun(partyHomun[0]);
-	nowSkillTrun[1] = homunData->getSkillTrun(partyHomun[1]);
-	nowSkillTrun[2] = homunData->getSkillTrun(partyHomun[2]);
-	
-	Sprite* card1 = Sprite::create(homunData->getImageName(partyHomun[0]));
-	Sprite* card2 = Sprite::create(homunData->getImageName(partyHomun[1]));
-	Sprite* card3 = Sprite::create(homunData->getImageName(partyHomun[2]));
+	Sprite* card1 = Sprite::create(HomunData::getImageName(partyHomun[0]));
+	Sprite* card2 = Sprite::create(HomunData::getImageName(partyHomun[1]));
+	Sprite* card3 = Sprite::create(HomunData::getImageName(partyHomun[2]));
 	
 	auto card1Item = MenuItemSprite::create(card1, card1,CC_CALLBACK_1(PuzzleScene::Card1PushCallBack, this));
 	auto card1Menu = Menu::create(card1Item, NULL);
@@ -175,9 +176,9 @@ bool PuzzleScene::init() {
 	listener->onTouchEnded = CC_CALLBACK_2(PuzzleScene::onTouchEnded, this);
 	this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
 	
-	
-	
-	
+    
+    
+	/////////
 	
 	this->scheduleUpdate();
 	
@@ -453,8 +454,7 @@ void PuzzleScene::atomGenerate(float delta){
 
 //グループの削除判定確認から削除まで         ※とても汚い...
 void PuzzleScene::groupDelete(){
-	auto atomData = AtomData::getInstance();
-	auto pPattern = atomData->GetDestroyPattern();
+	auto pPattern = AtomData::GetDestroyPattern();
 	for(int group_i=0;group_i<atoms;group_i++){
 		for(int arra_i = 0;arra_i<8;arra_i++){
 			int arra[] = {
@@ -544,7 +544,7 @@ AtomNum PuzzleScene::popAtomSelect(){
 		}
 	}
 	int count = (arc4random()%randRange) +1;
-	int* droprate = HomunData::getInstance()->GetDropRate();
+	int* droprate = HomunData::GetDropRate();
 	for(int droprate_i = 0;*(droprate + droprate_i) != -1;droprate_i++){
 		for(int party_i =0;party_i<homuns;party_i++){
 			if(partyHomun[party_i] != HOMUN_NULL){
@@ -608,9 +608,7 @@ void PuzzleScene::CardEffect(int cardnum){
 	auto size = view->getFrameSize();
 	
 	//アニメーション画像の用意
-	HomunData* homunData = HomunData::getInstance();
-	
-	auto CutIn = Sprite::create(homunData->getSkillImageName(partyHomun[cardnum]));
+	auto CutIn = Sprite::create(HomunData::getSkillImageName(partyHomun[cardnum]));
 	
 	CutIn->setPosition(size.width/2, size.height + CutIn->getContentSize().height);
 	CutIn->setZOrder(1000);
@@ -631,7 +629,7 @@ void PuzzleScene::CardEffect(int cardnum){
 	
 	
 	//スキル
-	nowSkillTrun[cardnum] = homunData->getSkillTrun(partyHomun[cardnum]);
+	nowSkillTrun[cardnum] = HomunData::getSkillTrun(partyHomun[cardnum]);
 	auto cardFrame = (Sprite*)this->getChildByTag(1100 + cardnum);
 	cardFrame->setColor(Color3B(22, 94, 131));
 	
