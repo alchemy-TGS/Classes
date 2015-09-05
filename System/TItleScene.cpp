@@ -2,6 +2,7 @@
 #include "SimpleAudioEngine.h"
 using namespace CocosDenshion;
 USING_NS_CC;
+
 Scene* TitleScene::createScene()
 {
 	auto scene = Scene::create();
@@ -29,10 +30,12 @@ void TitleScene::btnCreate(){
 	
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-		auto bg = Sprite::create("SystemImg/title_bg.png");
+	
+    
+	auto bg = Sprite::create("SystemImg/title_bg.png");
 	bg->setPosition(visibleSize.width / 2, visibleSize.height / 2);
 	this->addChild(bg);
-	
+    
 	auto bgCharactor = Sprite::create("SystemImg/title_homun.png");
 	bgCharactor->setPosition(visibleSize.width/2,visibleSize.height/2);
 	this->addChild(bgCharactor);
@@ -43,12 +46,12 @@ void TitleScene::btnCreate(){
 																  NULL)));
 	bg->setZOrder(0);
 	bgCharactor->setZOrder(1);
-	Sprite* Title = Sprite::create("SystemImg/title.png");
-	Title->setPosition(Point(visibleSize.width / 2, visibleSize.height / 5));
+	Sprite* Title = Sprite::create("SystemImg/title2.png");
+	Title->setPosition(Point(visibleSize.width / 2, visibleSize.height / 4));
 	addChild(Title);
-	Title->setScale(1.3);
-	Title->runAction(RepeatForever::create(Sequence::create(ScaleTo::create(1.2, 1.31),
-															ScaleTo::create(1.2, 1.39),
+	Title->setScale(1);
+	Title->runAction(RepeatForever::create(Sequence::create(ScaleTo::create(1.2, 1.1),
+															ScaleTo::create(1.2, 1),
 															NULL)));
 	Title->setZOrder(2);
 	
@@ -63,16 +66,19 @@ void TitleScene::btnCreate(){
 	Sprite* tapAreaSpr = Sprite::create();
 	tapAreaSpr->setContentSize(visibleSize);
 	MenuItemSprite* tapArea = MenuItemSprite::create(tapAreaSpr,tapAreaSpr,[](Ref*sender){
-		auto nextScene = HomeScene::createScene();
+		auto nextScene = TownScene::createScene();
 		auto pScene = TransitionProgressInOut::create(0.5f, nextScene);
 		Director::getInstance()->replaceScene(pScene);
 		SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
+		auto sound = SimpleAudioEngine::getInstance();
+		sound->playEffect("Sound/start.mp3");
+		
 	});
 	tapArea->setPosition(visibleSize/2);
 	auto tapMenu = Menu::create(tapArea ,NULL);
 	tapMenu->setPosition(Point::ZERO);
 	this->addChild(tapMenu);
-
+	
 }
 
 void TitleScene::toHomeBtn(Ref *pSender){

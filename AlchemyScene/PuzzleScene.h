@@ -9,7 +9,7 @@
 
 USING_NS_CC;
 
-class PuzzleScene :public Layer {
+class PuzzleScene :public Layer {	
 private:
 	//------------------変数------------------
 	
@@ -31,7 +31,7 @@ private:
 	Atom *atom[atoms];
 	
 	//ゲーム中に使用するホムン
-	HomunNum partyHomun[homuns];
+	int partyHomun[homuns];
 	int nowSkillTrun[homuns];
 	
 	//条件表示
@@ -106,9 +106,9 @@ private:
 	
 	//クリア判定
 	void clearCheck();
-	
-	//ゲームオーバー処理
-	void gameOverCheck();
+    
+    //ゲームオーバー処理
+    void gameOverCheck();
 	
 	//タイマー処理
 	void timerUpdate(float delta);

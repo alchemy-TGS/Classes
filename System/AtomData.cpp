@@ -67,18 +67,6 @@ int destroyPattern[8][8] = {
     },
 };
 
-AtomData* AtomData::mAtomData = NULL;
-AtomData* AtomData::getInstance()
-{
-	
-	if(mAtomData == NULL)
-	{
-		mAtomData = new AtomData();
-	}
-	
-	return mAtomData;
-}
-
 
 
 std::string AtomData::GetName(AtomNum atomnum)

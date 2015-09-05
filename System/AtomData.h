@@ -24,16 +24,13 @@ enum AtomNum{
 
 class AtomData{
 private:
-	static AtomData* mAtomData;
 	
 public:
-	static AtomData* getInstance();
-	
-	std::string GetName(AtomNum atomnum);
-	int GetBondCount(AtomNum atomnum);
-	std::string GetImageName(AtomNum atomnum);
-	std::string GetSafeBondImageName();
-	std::string GetPinchBondImageName();
-    int* GetDestroyPattern();
+	static std::string GetName(AtomNum atomnum);
+	static int GetBondCount(AtomNum atomnum);
+	static std::string GetImageName(AtomNum atomnum);
+	static std::string GetSafeBondImageName();
+	static std::string GetPinchBondImageName();
+    static int* GetDestroyPattern();
 };
 #endif /* defined(__Alchemy_TGS__AtomData__) */

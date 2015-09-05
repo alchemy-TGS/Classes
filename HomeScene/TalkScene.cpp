@@ -1,19 +1,20 @@
-#include "HomunScene.h"
+#include "TalkScene.h"
 USING_NS_CC;
 
-Scene* HomunScene::createScene()
+Scene* TalkScene::createScene()
 {
 	auto scene = Scene::create();
-	auto layer = HomunScene::create();
+	auto layer = TalkScene::create();
 	scene->addChild(layer);
 	return scene;
 }
 
-bool HomunScene::init()
+bool TalkScene::init()
 {
 	if ( !Layer::init() ){return false;}
 	
 	auto view = Director::getInstance()->getOpenGLView();
 	auto size = view->getFrameSize();
+	
 	return true;
 }

@@ -12,11 +12,6 @@ bool Atom::init(AtomNum type, int groupnum) {
 	static auto size = view->getFrameSize();
 	
 	
-	
-	//原子データのインスタンスを取得
-	AtomData *atomdata = AtomData::getInstance();
-	
-	
 	//受け取った原子番号をセット
 	atomnum = type;
 	
@@ -26,20 +21,20 @@ bool Atom::init(AtomNum type, int groupnum) {
 	
 	
 	//結合手の数の初期化
-	bondCount = atomdata->GetBondCount(type);
-	initialBondCount = atomdata->GetBondCount(type);
+	bondCount = AtomData::GetBondCount(type);
+	initialBondCount = AtomData::GetBondCount(type);
 	
 	
 	
 	
 	//原子背景スプライト
-	atom = Sprite::create(atomdata->GetImageName(type));
+	atom = Sprite::create(AtomData::GetImageName(type));
 	atom->setTag(100);
 	addChild(atom);
 	
 	
 	//原子名ラベル
-	auto atomname = atomdata->GetName(type);
+	auto atomname = AtomData::GetName(type);
 	auto atomLabel = Sprite::create(atomname);
 	atomLabel->setPosition(atom->getContentSize().width/2,atom->getContentSize().height/2);
 	atomLabel->setTag(110);
@@ -47,7 +42,7 @@ bool Atom::init(AtomNum type, int groupnum) {
 	
 	
 	//結合手背景スプライト
-	auto bond = Sprite::create(atomdata->GetSafeBondImageName());
+	auto bond = Sprite::create(AtomData::GetSafeBondImageName());
 	bond->setPosition(atom->getContentSize().width - (size.width / 100),
 					  atom->getContentSize().height- (size.height/ 100));
 	bond->setTag(120);
@@ -56,7 +51,7 @@ bool Atom::init(AtomNum type, int groupnum) {
 	
 	//結合手の数ラベル
 	std::string str = std::to_string(bondCount);
-	bondlabel = LabelTTF::create(str, "Arial", int(size.height / 20));
+	bondlabel = LabelTTF::create(str, "fonts/mplus-2p-heavy.ttf", int(size.height / 20));
 	bondlabel->setPosition(bond->getContentSize().width/2,bond->getContentSize().height/2);
 	bondlabel->setTag(130);
 	bond->addChild(bondlabel);
@@ -77,7 +72,7 @@ void Atom::update(float delta)
 	//結合手が0なら結合手の背景画像を変更
 	if(bondCount == 0){
 		auto bond = (Sprite*)atom->getChildByTag(120);
-		bond->setTexture(AtomData::getInstance()->GetPinchBondImageName());
+		bond->setTexture(AtomData::GetPinchBondImageName());
 	}
 }
 
@@ -131,5 +126,5 @@ void Atom::bondCountReset()
 {
 	bondCount = initialBondCount;
 	auto bond = (Sprite*)atom->getChildByTag(120);
-	bond->setTexture(AtomData::getInstance()->GetSafeBondImageName());
+	bond->setTexture(AtomData::GetSafeBondImageName());
 }

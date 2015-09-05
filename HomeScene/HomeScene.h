@@ -11,6 +11,7 @@
 #include "HomeScene.h"
 #include "DebugScene.h"
 #include "PuzzleChooseScene.h"
+#include "HomunChooseScene.h"
 #include "cocos-ext.h"
 USING_NS_CC_EXT;
 

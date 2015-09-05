@@ -35,11 +35,11 @@ void HomeScene::initBackGround(int winWidth, int winHeight){
 void HomeScene::initFotterBtn(int winWidth, int winHeight){
 	
 	std::string fotterImgName[5]{
-		"SystemImg/FotterImg/fotter_Home.png",
-		"SystemImg/FotterImg/fotter_Homun.png",
+		"SystemImg/FotterImg/footer-home.png",
+		"SystemImg/FotterImg/footer-homun.png",
 		"SystemImg/FotterImg/fotter_Alchemy.png",
-		"SystemImg/FotterImg/fotter_Quest.png",
-		"SystemImg/FotterImg/fotter_Town.png"
+		"SystemImg/FotterImg/footer-quest.png",
+		"SystemImg/FotterImg/footer-town.png"
 	};
 	
 	int fotterImgSize;
@@ -55,6 +55,7 @@ void HomeScene::initFotterBtn(int winWidth, int winHeight){
 	
 	auto homeSpr = Sprite::create(fotterImgName[0]);
 	auto homePushSpr = Sprite::create(fotterImgName[0]);
+	
 	homePushSpr->setColor(Color3B(102, 102, 102));
 	auto fotterHomeItem = MenuItemSprite::create(homeSpr, homePushSpr,CC_CALLBACK_1(HomeScene::fotter_Home_Push, this));
 	auto fotterHomeMenu = Menu::create(fotterHomeItem, NULL);
@@ -94,6 +95,10 @@ void HomeScene::initFotterBtn(int winWidth, int winHeight){
 	fotterTownMenu->setPosition(Point(winWidth / 2 +(fotterPosXHint * 5), fotterPosY));
 	this->addChild(fotterTownMenu, ZOrder::Fotter, TAG_TOWN);
 	
+	fotterHomeItem->setScale(winHeight/1024);
+	fotterhomunItem->setScale(winHeight/1024);
+	fotterQuestItem->setScale(winHeight/1024);
+	fotterTownItem->setScale(winHeight/1024);
 	
 	/*
 	for (int i = 0; i < 5; i++) {
@@ -152,7 +157,7 @@ void HomeScene::fotter_Quest_Push(Ref* pSender){
 
 void HomeScene::fotter_Town_Push(Ref* pSender){
 	
-	auto nextScene = TitleScene::createScene();
+	auto nextScene = TownScene::createScene();
 	auto pScene = TransitionProgressInOut::create(0.5f, nextScene);
 	Director::getInstance()->replaceScene(pScene);
 }

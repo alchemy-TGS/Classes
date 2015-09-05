@@ -11,7 +11,7 @@ std::string homunImage[] = {
 	"AlchemyImg/Card/C_Card_SD_Alchemy.png",
 	"AlchemyImg/Card/CO2_Card_SD_Alchemy.png",
 	"AlchemyImg/Card/C2H5OH_Card_SD_Alchemy.png",
-	"",
+	"AlchemyImg/Card/H2_Card_SD_Alchemy.png",//空なので代用
     "AlchemyImg/Card/NH3_Card_SD_Alchemy.png",
 };
 
@@ -23,7 +23,7 @@ std::string skillImage[] = {
 	"HomunImg/C/C_Card_big.png",
 	"HomunImg/CO2/CO2_Card_big.png",
 	"HomunImg/C2H5OH/C2H5OH_Card_big.png",
-	"",
+	"HomunImg/H2/H2_Card_big.png",          //空なので代用
     "HomunImg/NH3/NH3_Card_big.png",
 };
 
@@ -73,19 +73,8 @@ int skillTrun[] = {
 };
 
 
-HomunData* HomunData::mHomunData = NULL;
-HomunData* HomunData::getInstance()
-{
-	
-	if(mHomunData == NULL)
-	{
-		mHomunData = new HomunData();
-	}
-	
-	return mHomunData;
-}
 
-std::string HomunData::getImageName(HomunNum num)
+std::string HomunData::getImageName(int num)
 {
     return homunImage[num];
 }
@@ -94,11 +83,11 @@ int* HomunData::GetDropRate()
 {
     return dropRate[0];
 }
-std::string HomunData::getSkillImageName(HomunNum num)
+std::string HomunData::getSkillImageName(int num)
 {
     return skillImage[num];
 }
-int HomunData::getSkillTrun(HomunNum num)
+int HomunData::getSkillTrun(int num)
 {
     return skillTrun[num];
 }

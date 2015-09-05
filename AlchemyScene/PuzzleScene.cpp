@@ -1,5 +1,7 @@
 #include "PuzzleScene.h"
 #include <iostream>
+#include "SimpleAudioEngine.h"
+using namespace CocosDenshion;
 using namespace std;
 USING_NS_CC;
 
@@ -18,6 +20,11 @@ bool PuzzleScene::init() {
 	if (!Layer::init()) {
 		return false;
 	}
+	
+	static auto Bgm = SimpleAudioEngine::getInstance();
+	
+	Bgm->playBackgroundMusic("Sound/alchemy_Puzzle.mp3",true);
+	
 	
 	//画面のサイズを取得
 	auto view = Director::getInstance()->getOpenGLView();
@@ -101,19 +108,20 @@ bool PuzzleScene::init() {
 	
 	
 	//パーティホムンの初期化　　userDefault（？）で、もってくればいいか？
-	HomunData* homunData = HomunData::getInstance();
+    
+    auto savedata = CCUserDefault::getInstance();
+        
+	partyHomun[0] = savedata->getIntegerForKey("PartyHomun_0");
+	partyHomun[1] = savedata->getIntegerForKey("PartyHomun_1");
+	partyHomun[2] = savedata->getIntegerForKey("PartyHomun_2");
 	
-	partyHomun[0] = HOMUN_H2;
-	partyHomun[1] = HOMUN_O2;
-	partyHomun[2] = HOMUN_CO2;
+	nowSkillTrun[0] = HomunData::getSkillTrun(partyHomun[0]);
+	nowSkillTrun[1] = HomunData::getSkillTrun(partyHomun[1]);
+	nowSkillTrun[2] = HomunData::getSkillTrun(partyHomun[2]);
 	
-	nowSkillTrun[0] = homunData->getSkillTrun(partyHomun[0]);
-	nowSkillTrun[1] = homunData->getSkillTrun(partyHomun[1]);
-	nowSkillTrun[2] = homunData->getSkillTrun(partyHomun[2]);
-	
-	Sprite* card1 = Sprite::create(homunData->getImageName(partyHomun[0]));
-	Sprite* card2 = Sprite::create(homunData->getImageName(partyHomun[1]));
-	Sprite* card3 = Sprite::create(homunData->getImageName(partyHomun[2]));
+	Sprite* card1 = Sprite::create(HomunData::getImageName(partyHomun[0]));
+	Sprite* card2 = Sprite::create(HomunData::getImageName(partyHomun[1]));
+	Sprite* card3 = Sprite::create(HomunData::getImageName(partyHomun[2]));
 	
 	auto card1Item = MenuItemSprite::create(card1, card1,CC_CALLBACK_1(PuzzleScene::Card1PushCallBack, this));
 	auto card1Menu = Menu::create(card1Item, NULL);
@@ -149,7 +157,7 @@ bool PuzzleScene::init() {
 	condition = 10;
 	conditionType = HOMUN_H2O;
 	
-	conditionLabel = LabelTTF::create("", "Arial", int(size.height/12));
+	conditionLabel = LabelTTF::create("", "fonts/mplus-2p-heavy.ttf", int(size.height/12));
 	conditionLabel->setPosition(Point(header->getContentSize().width / 4 * 3,
 									  header->getPosition().y - (header->getContentSize().height / 5)));
 	conditionLabel->setColor(Color3B(60, 60, 60));
@@ -157,7 +165,7 @@ bool PuzzleScene::init() {
 	
 	
 	//タイマーの表示
-	timerlabel = CCLabelTTF::create("0:00", "Arial", int(size.height/19));
+	timerlabel = CCLabelTTF::create("0:00", "fonts/mplus-2p-heavy.ttf", int(size.height/19));
 	timerlabel->setPosition(Point(size.width/2,size.height/50*48));
 	this->addChild(timerlabel);
 	
@@ -175,9 +183,9 @@ bool PuzzleScene::init() {
 	listener->onTouchEnded = CC_CALLBACK_2(PuzzleScene::onTouchEnded, this);
 	this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
 	
-	
-	
-	
+    
+    
+	/////////
 	
 	this->scheduleUpdate();
 	
@@ -236,6 +244,8 @@ bool PuzzleScene::onTouchBegan(Touch *touch, Event *event)
 				keepAtom = atom[i];
 				lineStartPosision = atom[i]->atom->getPosition();
 				lineGoalPosision  = atom[i]->atom->getPosition();
+				auto sound = SimpleAudioEngine::getInstance();
+				sound->playEffect("Sound/selected.mp3");
 			}
 			else
 			{
@@ -288,11 +298,11 @@ void PuzzleScene::onTouchEnded(Touch *touch, Event *event)
 		if(atom[i]->isTapped(touchPoint)){
 			if(drawlineFlag){
 				lineGoalPosision  = atom[i]->atom->getPosition();
-				
+                
 				if(keepAtom->bondCount > 0 &&
-				   atom[i]->bondCount > 0 &&
-				   atom[i]->getInitialGroup() != keepAtom->getInitialGroup()){
-					
+                   atom[i]->bondCount > 0 &&
+                   atom[i]->getInitialGroup() != keepAtom->getInitialGroup()){
+                    
 					setGroup(atom[i]->getGroup(),keepAtomGroup);
 					keepAtom->bondCount--;
 					atom[i]->bondCount--;
@@ -305,6 +315,7 @@ void PuzzleScene::onTouchEnded(Touch *touch, Event *event)
 					}
 				}
 			}
+			
 			if(groupResetFlag) {
 				groupReset();
 			}
@@ -345,7 +356,7 @@ void PuzzleScene::timerUpdate(float delta){
 	int timeM = int(nowTime)/60;
 	int timeS = int(nowTime)%60;
 	
-	String *timestr = String::createWithFormat("%d:%d",timeM,timeS);
+	String *timestr = String::createWithFormat("%2.2d:%2.2d",timeM,timeS);
 	timerlabel->setString(timestr->getCString());
 	
 	// タイマーの色
@@ -403,10 +414,10 @@ void PuzzleScene::clearCheck(){
 
 //ゲームオーバー判定
 void PuzzleScene::gameOverCheck(){
-	if(nowTime < 0){
-		//ここにGameOverScene
-		log("GameOver");
-	}
+    if(nowTime < 0){
+        //ここにGameOverScene
+        log("GameOver");
+    }
 }
 
 //原子生成処理
@@ -453,8 +464,7 @@ void PuzzleScene::atomGenerate(float delta){
 
 //グループの削除判定確認から削除まで         ※とても汚い...
 void PuzzleScene::groupDelete(){
-	auto atomData = AtomData::getInstance();
-	auto pPattern = atomData->GetDestroyPattern();
+	auto pPattern = AtomData::GetDestroyPattern();
 	for(int group_i=0;group_i<atoms;group_i++){
 		for(int arra_i = 0;arra_i<8;arra_i++){
 			int arra[] = {
@@ -468,10 +478,10 @@ void PuzzleScene::groupDelete(){
 				*(pPattern + arra_i * 8 + 7),
 			};
 			
-			/*
-			 for(int i=0;i<8;i++){
+            /*
+			for(int i=0;i<8;i++){
 				log("%d",*(pPattern + arra_i * 8+i));
-			 }*/
+			}*/
 			int arraCount = 0;
 			
 			for(int i=0;i<atoms;i++){
@@ -497,23 +507,29 @@ void PuzzleScene::groupDelete(){
 					for(int i=0;i<atoms;i++){
 						if(atom[i] == NULL) continue;
 						if(atom[i]->getGroup() == group_i){
+							
 							atom[i]->removeFromParentAndCleanup(true);
+							
 							atom[i] = NULL;
 							
 						}
 					}
+					auto sound = SimpleAudioEngine::getInstance();
+					sound->playEffect("Sound/alchemyOK.mp3");
 					groupReset();
 				}
 			}
-			
+            
 		}
-		
-		if(bondCountCheck(group_i)){
-			log("HUANTEI");
-			//結合不安定時の処理
-			//ここに結合が不安定時のエフェクトがあれば入れて下さい
-			groupReset();
-		}
+        
+        if(bondCountCheck(group_i)){
+            log("HUANTEI");
+            //結合不安定時の処理
+			auto sound = SimpleAudioEngine::getInstance();
+			sound->playEffect("Sound/alchemyCancel.mp3");
+            //ここに結合が不安定時のエフェクトがあれば入れて下さい
+            groupReset();
+        }
 	}
 }
 
@@ -544,13 +560,13 @@ AtomNum PuzzleScene::popAtomSelect(){
 		}
 	}
 	int count = (arc4random()%randRange) +1;
-	int* droprate = HomunData::getInstance()->GetDropRate();
+	int* droprate = HomunData::GetDropRate();
 	for(int droprate_i = 0;*(droprate + droprate_i) != -1;droprate_i++){
 		for(int party_i =0;party_i<homuns;party_i++){
 			if(partyHomun[party_i] != HOMUN_NULL){
-				//log("%d,%d",*(droprate + (partyHomun[party_i]*5) + droprate_i),count);
+                //log("%d,%d",*(droprate + (partyHomun[party_i]*5) + droprate_i),count);
 				
-				count -= *(droprate + partyHomun[party_i]*5 + droprate_i );
+                count -= *(droprate + partyHomun[party_i]*5 + droprate_i );
 				if(count < 0){
 					if(droprate_i == 0){
 						return ATOM_H;
@@ -574,23 +590,23 @@ AtomNum PuzzleScene::popAtomSelect(){
 
 //引数のグループの原子の結合手が全て0になっているかの真偽を返します
 bool PuzzleScene::bondCountCheck(int group){
-	
-	bool checkPointFlag = false;
-	
+    
+    bool checkPointFlag = false;
+    
 	for(int i=0;i<atoms;i++){
 		if(atom[i] == NULL) continue;
 		if(atom[i]->getGroup() == group){
-			checkPointFlag = true;
+            checkPointFlag = true;
 			if(atom[i]->bondCount > 0){
 				return false;
 			}
 		}
 	}
-	if(checkPointFlag){
-		return true;
-	}else{
-		return false;
-	}
+    if(checkPointFlag){
+        return true;
+    }else{
+        return false;
+    }
 	
 }
 
@@ -608,9 +624,7 @@ void PuzzleScene::CardEffect(int cardnum){
 	auto size = view->getFrameSize();
 	
 	//アニメーション画像の用意
-	HomunData* homunData = HomunData::getInstance();
-	
-	auto CutIn = Sprite::create(homunData->getSkillImageName(partyHomun[cardnum]));
+	auto CutIn = Sprite::create(HomunData::getSkillImageName(partyHomun[cardnum]));
 	
 	CutIn->setPosition(size.width/2, size.height + CutIn->getContentSize().height);
 	CutIn->setZOrder(1000);
@@ -628,10 +642,12 @@ void PuzzleScene::CardEffect(int cardnum){
 	auto sequence = Sequence::create(easeAct1, delay1, easeAct2, remove, NULL);
 	
 	CutIn->runAction(sequence);
+	auto sound = SimpleAudioEngine::getInstance();
+	sound->playEffect("Sound/skil.mp3");
 	
-	
+
 	//スキル
-	nowSkillTrun[cardnum] = homunData->getSkillTrun(partyHomun[cardnum]);
+	nowSkillTrun[cardnum] = HomunData::getSkillTrun(partyHomun[cardnum]);
 	auto cardFrame = (Sprite*)this->getChildByTag(1100 + cardnum);
 	cardFrame->setColor(Color3B(22, 94, 131));
 	
