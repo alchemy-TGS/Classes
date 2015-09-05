@@ -1,5 +1,6 @@
 #include "EventImgData.h"
 USING_NS_CC;
+
 using namespace std;
 #include <iostream>
 

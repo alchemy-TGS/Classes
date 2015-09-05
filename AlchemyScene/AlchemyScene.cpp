@@ -1,6 +1,7 @@
 #include "AlchemyScene.h"
 #include <iostream>
 USING_NS_CC;
+#define FONT "fonts/mplus-1m-medium.ttf"
 using namespace std;
 
 Scene* AlchemyScene::createScene()
@@ -38,14 +39,17 @@ void AlchemyScene::initGra(int winWidth, int winHeight){
 	addChild(backGround, ZO_BACKGROUND, TAG_BackGround);
 
 	//	セリフ枠
-	auto mesWin = Sprite::create();
+	auto mesWin = Sprite::create("SystemImg/talkWindow.png");
+	mesWin->setPosition(Point(winWidth / 2, winHeight / 4 * 3));
+	/*
 	mesWin->setTextureRect(Rect(0, 0, winWidth - winWidth/10 , winHeight/2 - winHeight / 10));
 	mesWin->setColor(Color3B(236,109,113));
 	mesWin->setPosition(Point(winWidth / 2, winHeight / 4 * 3));
+	*/
 	addChild(mesWin, ZO_BALLOON, TAG_BALLOON);
 	
-	auto mes = Label::createWithSystemFont("クエスト01\n飲水がほしい","Arial", 90);
-	mes->setColor(Color3B::WHITE);
+	auto mes = Label::createWithSystemFont("クエスト01\n飲水がほしい",FONT, 90);
+	mes->setColor(Color3B::BLACK);
 	mes->setPosition(mesWin->getPosition());
 	addChild(mes, ZO_TALKING_CHAR, TAG_TALKING_CHAR);
 	//	ホムン初期配置		透明画像
@@ -165,6 +169,7 @@ void AlchemyScene::talkEvent(int winWidth, int winHeight){
 		log("now talkNo: %d", tapCounter);
 			switch (tapCounter) {
 			case 0:{
+				mes->setColor(Color3B::WHITE);
 					// セリフの張替え
 					mes->setString(eventImgData->getTalkLists(tapCounter).c_str());
 					//	ホムンの張替え

@@ -51,7 +51,7 @@ bool Atom::init(AtomNum type, int groupnum) {
 	
 	//結合手の数ラベル
 	std::string str = std::to_string(bondCount);
-	bondlabel = LabelTTF::create(str, "Arial", int(size.height / 20));
+	bondlabel = LabelTTF::create(str, "fonts/mplus-2p-heavy.ttf", int(size.height / 20));
 	bondlabel->setPosition(bond->getContentSize().width/2,bond->getContentSize().height/2);
 	bondlabel->setTag(130);
 	bond->addChild(bondlabel);

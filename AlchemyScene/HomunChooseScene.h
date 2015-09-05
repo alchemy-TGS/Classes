@@ -26,6 +26,13 @@ protected:
 		TAG_LIST_WHITE,
 		TAG_LIST_CHAR,
 	};
+	
+	enum SoundNo{
+		SOUND_NULL = -1,
+		SOUND_OK,
+		SOUND_NO,
+		SOUND_SELECT,
+	};
 
 private:
     static const int homuns = 3;
@@ -38,6 +45,7 @@ public:
 	void initGra(int winWidth, int winHeight);
 	void initScrollView();
     void addHomunButton(int i, int num);
+	void soundManager(SoundNo soundNo);
 	
 	CREATE_FUNC(HomunChooseScene);
 };

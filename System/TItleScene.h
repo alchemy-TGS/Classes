@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "cocos2d.h"
 #include "HomeScene.h"
+#include "TownScene.h"
 class TitleScene : public cocos2d::Layer
 {
 public:

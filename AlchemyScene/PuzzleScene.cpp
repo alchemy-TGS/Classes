@@ -1,5 +1,7 @@
 #include "PuzzleScene.h"
 #include <iostream>
+#include "SimpleAudioEngine.h"
+using namespace CocosDenshion;
 using namespace std;
 USING_NS_CC;
 
@@ -18,6 +20,11 @@ bool PuzzleScene::init() {
 	if (!Layer::init()) {
 		return false;
 	}
+	
+	static auto Bgm = SimpleAudioEngine::getInstance();
+	
+	Bgm->playBackgroundMusic("Sound/alchemy_Puzzle.mp3",true);
+	
 	
 	//画面のサイズを取得
 	auto view = Director::getInstance()->getOpenGLView();
@@ -150,7 +157,7 @@ bool PuzzleScene::init() {
 	condition = 10;
 	conditionType = HOMUN_H2O;
 	
-	conditionLabel = LabelTTF::create("", "Arial", int(size.height/12));
+	conditionLabel = LabelTTF::create("", "fonts/mplus-2p-heavy.ttf", int(size.height/12));
 	conditionLabel->setPosition(Point(header->getContentSize().width / 4 * 3,
 									  header->getPosition().y - (header->getContentSize().height / 5)));
 	conditionLabel->setColor(Color3B(60, 60, 60));
@@ -158,7 +165,7 @@ bool PuzzleScene::init() {
 	
 	
 	//タイマーの表示
-	timerlabel = CCLabelTTF::create("0:00", "Arial", int(size.height/19));
+	timerlabel = CCLabelTTF::create("0:00", "fonts/mplus-2p-heavy.ttf", int(size.height/19));
 	timerlabel->setPosition(Point(size.width/2,size.height/50*48));
 	this->addChild(timerlabel);
 	
@@ -237,6 +244,8 @@ bool PuzzleScene::onTouchBegan(Touch *touch, Event *event)
 				keepAtom = atom[i];
 				lineStartPosision = atom[i]->atom->getPosition();
 				lineGoalPosision  = atom[i]->atom->getPosition();
+				auto sound = SimpleAudioEngine::getInstance();
+				sound->playEffect("Sound/selected.mp3");
 			}
 			else
 			{
@@ -306,6 +315,7 @@ void PuzzleScene::onTouchEnded(Touch *touch, Event *event)
 					}
 				}
 			}
+			
 			if(groupResetFlag) {
 				groupReset();
 			}
@@ -346,7 +356,7 @@ void PuzzleScene::timerUpdate(float delta){
 	int timeM = int(nowTime)/60;
 	int timeS = int(nowTime)%60;
 	
-	String *timestr = String::createWithFormat("%d:%d",timeM,timeS);
+	String *timestr = String::createWithFormat("%2.2d:%2.2d",timeM,timeS);
 	timerlabel->setString(timestr->getCString());
 	
 	// タイマーの色
@@ -497,11 +507,15 @@ void PuzzleScene::groupDelete(){
 					for(int i=0;i<atoms;i++){
 						if(atom[i] == NULL) continue;
 						if(atom[i]->getGroup() == group_i){
+							
 							atom[i]->removeFromParentAndCleanup(true);
+							
 							atom[i] = NULL;
 							
 						}
 					}
+					auto sound = SimpleAudioEngine::getInstance();
+					sound->playEffect("Sound/alchemyOK.mp3");
 					groupReset();
 				}
 			}
@@ -511,6 +525,8 @@ void PuzzleScene::groupDelete(){
         if(bondCountCheck(group_i)){
             log("HUANTEI");
             //結合不安定時の処理
+			auto sound = SimpleAudioEngine::getInstance();
+			sound->playEffect("Sound/alchemyCancel.mp3");
             //ここに結合が不安定時のエフェクトがあれば入れて下さい
             groupReset();
         }
@@ -626,8 +642,10 @@ void PuzzleScene::CardEffect(int cardnum){
 	auto sequence = Sequence::create(easeAct1, delay1, easeAct2, remove, NULL);
 	
 	CutIn->runAction(sequence);
+	auto sound = SimpleAudioEngine::getInstance();
+	sound->playEffect("Sound/skil.mp3");
 	
-	
+
 	//スキル
 	nowSkillTrun[cardnum] = HomunData::getSkillTrun(partyHomun[cardnum]);
 	auto cardFrame = (Sprite*)this->getChildByTag(1100 + cardnum);

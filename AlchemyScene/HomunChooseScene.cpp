@@ -1,5 +1,7 @@
 #include "HomunChooseScene.h"
 #include <iostream>
+#include "SimpleAudioEngine.h"
+using namespace CocosDenshion;
 using namespace std;
 using namespace ui;
 USING_NS_CC;
@@ -11,6 +13,19 @@ Scene* HomunChooseScene::createScene()
 	scene->addChild(layer);
 	return scene;
 }
+
+void HomunChooseScene::soundManager(SoundNo soundNo){
+	
+	auto selectSound = SimpleAudioEngine::getInstance();
+	
+	switch (soundNo) {
+		case SOUND_OK:		selectSound->playEffect("Sound/OKSE.mp3");		break;
+		case SOUND_NO:		selectSound->playEffect("Sound/cancel2.mp3");	break;
+		case SOUND_SELECT:	selectSound->playEffect("Sound/selected.mp3");	break;
+		default: break;
+	}
+}
+
 
 bool HomunChooseScene::init()
 {
@@ -26,8 +41,8 @@ bool HomunChooseScene::init()
     for(int i = 0;i<homuns;i++){
         partyHomun[i] = HOMUN_NULL;
     }
-    
-    
+	
+	
     //startButton
     auto *sprite = Sprite::create("SystemImg/title_tap.png");
     auto *sprite2 = Sprite::create("SystemImg/title_tap.png");
@@ -44,9 +59,10 @@ bool HomunChooseScene::init()
         savedata->setIntegerForKey("PartyHomun_1", partyHomun[1]);
         savedata->setIntegerForKey("PartyHomun_2", partyHomun[2]);
         savedata->flush();
-        
+		
         //SEとか入れたい
-        
+		soundManager(SOUND_OK);
+		
         auto nextScene = PuzzleScene::createScene();
         auto pScene = TransitionFade::create(0.5f, nextScene);
         Director::getInstance()->replaceScene(pScene);
@@ -67,10 +83,7 @@ bool HomunChooseScene::init()
 void HomunChooseScene::initGra(int winWidth, int winHeight){
 	
     //	背景
-	auto backGround = Sprite::create();
-	Rect backGroundRect = Rect(0, 0, winWidth, winHeight);
-	backGround->setTextureRect(backGroundRect);
-	backGround->setColor(Color3B(188, 226, 232));
+	auto backGround = Sprite::create("AlchemyImg/homunSelect.png");
 	backGround->setPosition(Point(winWidth / 2, winHeight / 2));
 	addChild(backGround, ZOrder::ZO_BACKGROUND, Tag::TAG_BACKGROUND);
 }
@@ -107,6 +120,8 @@ void HomunChooseScene::initScrollView(){
             }
             
             //SEとか入れたい
+			soundManager(SOUND_SELECT);
+			
         });
         
         button->setTag(i);
@@ -162,6 +177,7 @@ void HomunChooseScene::addHomunButton(int i , int num){
         partyHomun[i] = HOMUN_NULL;
         
         //SEとか入れたい
+		soundManager(SOUND_NO);
     });
     auto menu = Menu::create(button, NULL);
     menu->setPosition(size.width / 2 + button->getContentSize().width * (-1 + i%3) , size.height * 7/9);

@@ -9,7 +9,7 @@
 
 USING_NS_CC;
 
-class PuzzleScene :public Layer {
+class PuzzleScene :public Layer {	
 private:
 	//------------------変数------------------
 	
