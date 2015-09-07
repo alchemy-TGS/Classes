@@ -33,6 +33,8 @@ private:
 	//ゲーム中に使用するホムン
 	int partyHomun[homuns];
 	int nowSkillTrun[homuns];
+    
+    float nowSkillEffectTime[homuns];
 	
 	//条件表示
 	LabelTTF* conditionLabel;

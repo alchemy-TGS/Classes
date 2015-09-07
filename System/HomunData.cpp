@@ -72,6 +72,63 @@ int skillTrun[] = {
     11,
 };
 
+//スキル発動時の延長時間
+int skillTimeExtension[] = {
+    10,
+    20,
+    30,
+    40,
+    50,
+    60,
+    70,
+    80,
+    90,
+};
+
+//原子生成確率を変更する時間
+int skillEffectTime[]{
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+};
+
+//スキル発動時の原子生成確率　＊合計が100を超えないようにしてください
+int skillDropRate[][5]{
+    //  H   O   C   N   last
+    {
+        100,  0,  0,  0,  -1,
+    },
+    {
+        0,  100,  0,  0,  -1,
+    },
+    {
+        0,  0,  100,  0,  -1,
+    },
+    {
+        0,  0,  0,  0,  -1,
+    },
+    {
+        0,  0,  0,  0,  -1,
+    },
+    {
+        0,  0,  0,  0,  -1,
+    },
+    {
+        0,  0,  0,  0,  -1,
+    },
+    {
+        0,  0,  0,  0,  -1,
+    },
+    {
+        0,  0,  0,  0,  -1,
+    },
+};
 
 
 std::string HomunData::getImageName(int num)
@@ -90,4 +147,16 @@ std::string HomunData::getSkillImageName(int num)
 int HomunData::getSkillTrun(int num)
 {
     return skillTrun[num];
+}
+int HomunData::getSkillTimeExtension(int num)
+{
+    return skillTimeExtension[num];
+}
+int HomunData::getSkillEffectTime(int num)
+{
+    return skillEffectTime[num];
+}
+int* HomunData::getSkillDropRate()
+{
+    return skillDropRate[0];
 }

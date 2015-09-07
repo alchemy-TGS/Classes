@@ -173,6 +173,10 @@ bool PuzzleScene::init() {
 	//初期タイマーのセット
 	timeswitch = true;
 	nowTime = 120;			//秒
+    
+    for(int i=0;i<homuns;i++){
+        nowSkillEffectTime[i] = 0;
+    }
 	
 	
 	
@@ -352,6 +356,9 @@ void PuzzleScene::Card3PushCallBack(Ref *pSender){
 void PuzzleScene::timerUpdate(float delta){
 	if(timeswitch){
 		nowTime -= delta;
+        for(int i=0;i<homuns;i++){
+            nowSkillEffectTime[i] -= delta;
+        }
 	}
 	int timeM = int(nowTime)/60;
 	int timeS = int(nowTime)%60;
@@ -508,10 +515,24 @@ void PuzzleScene::groupDelete(){
 						if(atom[i] == NULL) continue;
 						if(atom[i]->getGroup() == group_i){
 							
-							atom[i]->removeFromParentAndCleanup(true);
-							
-							atom[i] = NULL;
-							
+                            //削除アニメーション
+                            auto anime1 = ScaleBy::create(0.3, 1.3);
+                            auto anime2 = ScaleBy::create(0.5, 0);
+                            
+                            cocos2d::CallFunc *compCallFunc = CallFunc::create([=](){
+                                // アニメーション終了後にやりたいこと
+                                atom[i]->removeFromParentAndCleanup(true);
+                                atom[i] = NULL;
+                            });
+                            
+                            auto sequence = Sequence::create(anime1, anime2, compCallFunc, NULL);
+                            
+                            atom[i]->atom->runAction(sequence);
+                            
+                            
+                            
+                            
+														
 						}
 					}
 					auto sound = SimpleAudioEngine::getInstance();
@@ -553,6 +574,38 @@ bool PuzzleScene::popPosCheck(int num, int x, int y){
 
 //ポップさせる原子を返します
 AtomNum PuzzleScene::popAtomSelect(){
+    for (int i=0; i<homuns; i++) {
+        
+        log("%f",nowSkillEffectTime[0]);
+        log("%f",nowSkillEffectTime[1]);
+        log("%f",nowSkillEffectTime[2]);
+        if(nowSkillEffectTime[i] > 0){
+            
+            int count = arc4random()%100 + 1;
+            int* droprate = HomunData::getSkillDropRate();
+            for(int droprate_i = 0;*(droprate + droprate_i) != -1;droprate_i++){
+                    if(partyHomun[i] != HOMUN_NULL){
+                        
+                    count -= *(droprate + partyHomun[i]*5 + droprate_i );
+                    if(count < 0){
+                        if(droprate_i == 0){
+                            return ATOM_H;
+                        }
+                        if(droprate_i == 1){
+                            return ATOM_O;
+                        }
+                        if(droprate_i == 2){
+                            return ATOM_C;
+                        }
+                        if(droprate_i == 3){
+                            return ATOM_N;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
 	int randRange = 0;
 	for(int f=0;f<homuns;f++){
 		if(partyHomun[f] != HOMUN_NULL){
@@ -646,12 +699,14 @@ void PuzzleScene::CardEffect(int cardnum){
 	sound->playEffect("Sound/skil.mp3");
 	
 
-	//スキル
+	//スキル使用後の画像リセット
 	nowSkillTrun[cardnum] = HomunData::getSkillTrun(partyHomun[cardnum]);
 	auto cardFrame = (Sprite*)this->getChildByTag(1100 + cardnum);
 	cardFrame->setColor(Color3B(22, 94, 131));
 	
-	nowTime += 10;
+    //スキル効果
+	nowTime += HomunData::getSkillTimeExtension(partyHomun[cardnum]);
+    nowSkillEffectTime[cardnum] = HomunData::getSkillEffectTime(partyHomun[cardnum]);
 }
 
 

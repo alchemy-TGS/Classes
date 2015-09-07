@@ -28,7 +28,11 @@ public:
     static std::string getImageName(int num);
     static std::string getSkillImageName(int num);
     static int getSkillTrun(int num);
-    //todo skillの効果を返し値or処理する方法を考える
+    
+    static int getSkillTimeExtension(int num);
+    static int getSkillEffectTime(int num);
+    static int* getSkillDropRate();
+    
 };
 
 
