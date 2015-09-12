@@ -457,7 +457,11 @@ void PuzzleScene::atomGenerate(float delta){
 			//	ポップのアニメーションようにスケールを0に
 			atom[i]->atom->setScale(0);
 			//	ポップと、アイドリングアニメーション
-			atom[i]->atom->runAction(RepeatForever::create(Sequence::create(ScaleTo::create(1.2, 1.05), ScaleTo::create(1.2, 0.95), NULL)));
+			atom[i]->atom->runAction(
+				RepeatForever::create(
+					Sequence::create(
+						EaseIn::create(ScaleTo::create(1.2, 1.05),2),
+						EaseIn::create(ScaleTo::create(1.2, 0.95),2), NULL)));
 			
 			nowPopInterval = atomPopInterval;
 			break;
@@ -516,9 +520,9 @@ void PuzzleScene::groupDelete(){
 						if(atom[i]->getGroup() == group_i){
 							
                             //削除アニメーション
-                            auto anime1 = ScaleBy::create(0.3, 1.3);
-                            auto anime2 = ScaleBy::create(0.5, 0);
-                            
+							auto anime1 = EaseIn::create(ScaleBy::create(0.3, 1.3),2);
+                            auto anime2 = EaseIn::create(ScaleBy::create(0.2, 0),2);
+							
                             cocos2d::CallFunc *compCallFunc = CallFunc::create([=](){
                                 // アニメーション終了後にやりたいこと
                                 atom[i]->removeFromParentAndCleanup(true);
