@@ -39,7 +39,7 @@ int bondCount[] = {
 	2,
 };
 
-int destroyPattern[8][8] = {
+int destroyPattern[9][8] = {
     //  H   He  li  Be  B   C   N   O   last
     {
         2,  0,  0,  0,  0,  0,  0,  0,
@@ -58,6 +58,9 @@ int destroyPattern[8][8] = {
     },
     {
         0,  0,  0,  0,  0,  1,  0,  2,
+    },
+    {
+        6,  0,  0,  0,  0,  2,  0,  1,
     },
     {
         0,  0,  0,  0,  0,  0,  2,  0,

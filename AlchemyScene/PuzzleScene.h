@@ -5,6 +5,7 @@
 #include "cocos2d.h"
 #include "AtomClass.h"
 #include "HomunData.h"
+#include "QuestList.h"
 #include "HardScene.h"
 #include "TItleScene.h"
 
@@ -40,7 +41,7 @@ private:
 	//条件表示
 	LabelTTF* conditionLabel;
 	int condition;
-	HomunNum conditionType;
+	int conditionType;
 	
 	//タイマー
 	CCLabelTTF* timerlabel;
