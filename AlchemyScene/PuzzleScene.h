@@ -5,7 +5,8 @@
 #include "cocos2d.h"
 #include "AtomClass.h"
 #include "HomunData.h"
-#include "ResultScene.h"
+#include "HardScene.h"
+#include "TItleScene.h"
 
 USING_NS_CC;
 

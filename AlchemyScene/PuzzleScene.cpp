@@ -154,7 +154,7 @@ bool PuzzleScene::init() {
 	
 	
 	//条件の表示
-	condition = 10;
+	condition = 20;
 	conditionType = HOMUN_H2O;
 	
 	conditionLabel = LabelTTF::create("", "fonts/mplus-2p-heavy.ttf", int(size.height/12));
@@ -172,7 +172,7 @@ bool PuzzleScene::init() {
 	
 	//初期タイマーのセット
 	timeswitch = true;
-	nowTime = 120;			//秒
+	nowTime = 300;			//秒
     
     for(int i=0;i<homuns;i++){
         nowSkillEffectTime[i] = 0;
@@ -410,7 +410,7 @@ void PuzzleScene::clearCheck(){
 		//ここにシーン遷移
 		log("Claer!!");
 		if (flag == 0) {
-			auto nextScene = ResultScene::createScene();
+			auto nextScene = HardScene::createScene();
 			auto pScene = TransitionSlideInT::create(1.5, nextScene);
 			Director::getInstance()->replaceScene(pScene);
 			flag++;
@@ -422,8 +422,10 @@ void PuzzleScene::clearCheck(){
 //ゲームオーバー判定
 void PuzzleScene::gameOverCheck(){
     if(nowTime < 0){
-        //ここにGameOverScene
         log("GameOver");
+		auto nextScene = HardScene::createScene();
+		auto pScene = TransitionSlideInT::create(1.5, nextScene);
+		Director::getInstance()->replaceScene(pScene);
     }
 }
 

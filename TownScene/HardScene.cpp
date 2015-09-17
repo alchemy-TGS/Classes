@@ -1,14 +1,16 @@
-#include "TalkScene.h"
+#include "HardScene.h"
+#include "SimpleAudioEngine.h"
+using namespace CocosDenshion;
 USING_NS_CC;
-Scene* TownScene::createScene()
+Scene* HardScene::createScene()
 {
 	auto scene = Scene::create();
-	auto layer = TownScene::create();
+	auto layer = HardScene::create();
 	scene->addChild(layer);
 	return scene;
 }
 
-bool TownScene::init()
+bool HardScene::init()
 {
 	if ( !Layer::init() ){return false;}
 	
@@ -19,14 +21,13 @@ bool TownScene::init()
 	static auto view = Director::getInstance()->getOpenGLView();
 	static auto size = view->getFrameSize();
 	
-	static auto bg1 = Sprite::create("TownImg/H2_s.png");
+	static auto bg1 = Sprite::create("TownImg/s2.png");
 	bg1->setPosition(size/2);
 	bg1->setZOrder(1);
 	addChild(bg1, 1, 1);
-
 	
 	static auto mesWin = Sprite::create("SystemImg/talkWindow.png");
-	mesWin->setPosition(Point(size.width / 2, size.height / 8));
+	mesWin->setPosition(Point(size.width / 2, size.height / 6));
 	mesWin->setVisible(false);
 	addChild(mesWin, 2, 2);
 	
@@ -36,6 +37,7 @@ bool TownScene::init()
 	mes->setVisible(false);
 	addChild(mes, 3, 3);
 
+	
 	Sprite* tapAreaSpr = Sprite::create();
 	
 	tapAreaSpr->setContentSize(size);
@@ -43,37 +45,32 @@ bool TownScene::init()
 	MenuItemSprite* tapArea = MenuItemSprite::create(tapAreaSpr,tapAreaSpr,[this](Ref*sender){
 		switch (count) {
 			case 0:
+				log("TapOK");
+				
 				mes->setVisible(true);
 				mesWin->setVisible(true);
-				mes->setString("はじめまして！\nあるけみぃの世界へようこそ！"); break;
+				
+				mes->setString("あなたは……？"); break;
+				break;
 			case 1:
-				mes->setString("私は、H2\n（エイチ・ツー）です。\n物質名は水素です。"); break;
+				mes->setString("……そうですか。\nあなたが噂の錬金術士さん……。"); break;
 			case 2:
-				
-				mes->setString("あなたは錬金術士として、\nこの街にやって来ました。"); break;
+				mes->setString("私は、エタノールです。\nよろしくお願いしますね。"); break;
 			case 3:
-				mes->setString("これから、\n一緒に街を発展させましょう！");
-				break;
+				mes->setString("えっと、本日のあるけみぃの\n試遊はここまでになります。"); break;
 			case 4:
-				mes->setString("では早速、\n簡単な錬金をしてみましょうか。");
-				break;
-			case 5:
-				mes->setString("水を錬金してみましょう。");
-				break;
-			case 6:{
-				mesWin->setVisible(false);
-				mes->setVisible(false);
-				
-				auto spr = Sprite::create("TownImg/Tutorial01.png");
-				spr->setPosition(Point(1536/2,2048/2));
-				this->addChild(spr,10000, 100000);
-				break;
-			}
-			case 7:{
-				auto nextScene = HomunChooseScene::createScene();
+				mes->setString("今後はもっともっと\n私達の仲間が増える予定です。");break;
+			case 6:
+				mes->setString("よろしければ\nまた、遊んでください。");break;
+			case 7:
+				mes->setString("ありがとうございました。");break;
+			case 8:
+			{
+				auto nextScene = TitleScene::createScene();
 				auto pScene = TransitionFade::create(0.5f, nextScene);
 				Director::getInstance()->replaceScene(pScene);
-				break;}
+				break;
+			}
 			default:break;
 		}
 		count++;
@@ -82,6 +79,5 @@ bool TownScene::init()
 	auto tapMenu = Menu::create(tapArea ,NULL);
 	tapMenu->setPosition(Point::ZERO);
 	this->addChild(tapMenu);
-
 	return true;
 }
