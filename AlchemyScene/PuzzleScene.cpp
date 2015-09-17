@@ -68,7 +68,7 @@ bool PuzzleScene::init() {
 	this->addChild(headerTarget);
 	
 	//	今回のクエスト
-	auto QuestView = Sprite::create(QuestList::getconditionImageName(savedata->getIntegerForKey("QuesyConditionKey", 0)));
+	auto QuestView = Sprite::create(QuestList::getconditionImageName(savedata->getIntegerForKey("QuestConditionKey", 0)));
 	QuestView->setPosition(header->getPosition());
 	this->addChild(QuestView);
 	
@@ -156,8 +156,8 @@ bool PuzzleScene::init() {
 	
 	
 	//条件の表示
-	condition = QuestList::getcondition(savedata->getIntegerForKey("QuesyConditionKey", 0));
-	conditionType = QuestList::getconditionType(savedata->getIntegerForKey("QuesyConditionKey", 0));
+	condition = QuestList::getcondition(savedata->getIntegerForKey("QuestConditionKey", 0));
+	conditionType = QuestList::getconditionType(savedata->getIntegerForKey("QuestConditionKey", 0));
 	CCLOG("condi:%d",conditionType);
 	conditionLabel = LabelTTF::create("", "fonts/mplus-2p-heavy.ttf", int(size.height/12));
 	conditionLabel->setPosition(Point(header->getContentSize().width / 4 * 3,
