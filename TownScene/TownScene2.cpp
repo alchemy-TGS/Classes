@@ -1,24 +1,24 @@
-#include "TalkScene.h"
+#include "TownScene2.h"
 #include "SimpleAudioEngine.h"
 using namespace CocosDenshion;
 USING_NS_CC;
-Scene* TownScene::createScene()
+Scene* TownScene2::createScene()
 {
 	auto scene = Scene::create();
-	auto layer = TownScene::create();
+	auto layer = TownScene2::create();
 	scene->addChild(layer);
 	return scene;
 }
 
-bool TownScene::init()
+bool TownScene2::init()
 {
 	if ( !Layer::init() ){return false;}
 	
 	count = 0;
 	
 	auto savedata = CCUserDefault::getInstance();
-	savedata->setIntegerForKey("ClearSceneKey", 0);
-	savedata->setIntegerForKey("QuestConditionKey", 0);
+	savedata->setIntegerForKey("ClearSceneKey", 1);
+	savedata->setIntegerForKey("QuestConditionKey", 2);
 	savedata->flush();
 	
 	static auto titleBgm = SimpleAudioEngine::getInstance();
@@ -56,36 +56,16 @@ bool TownScene::init()
 			case 0:
 				mes->setVisible(true);
 				mesWin->setVisible(true);
-				mes->setString("はじめまして！\nあるけみぃの世界へようこそ！"); break;
+				mes->setString("おみごとです！"); break;
 			case 1:
-				mes->setString("私は、H2\n（エイチ・ツー）です。\n物質名は水素です。"); break;
+				mes->setString("次はアンモニアを\nつくってみましょう。"); break;
 			case 2:
 				
-				mes->setString("あなたは錬金術士として、\nこの街にやって来ました。"); break;
+				mes->setString("アンモニアは\nNが１つ、Hが３つ必要です。"); break;
 			case 3:
-				mes->setString("これから、\n一緒に街を発展させましょう！");
-				break;
-			case 4:
-				mes->setString("では早速、\n簡単な錬金をしてみましょうか。");
-				break;
-			case 5:
-				mes->setString("水を錬金してみましょう。");
-				break;
-			case 6:
-				mes->setString("水は、Hが２つとOが１つです。");
-				break;
-			case 7:
 				mes->setString("がんばってくださいね！");
-			case 8:{
-				mesWin->setVisible(false);
-				mes->setVisible(false);
-				
-				auto spr = Sprite::create("TownImg/Tutorial01.png");
-				spr->setPosition(Point(1536/2,2048/2));
-				this->addChild(spr,10000, 100000);
 				break;
-			}
-			case 9:{
+			case 4:{
 				SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
 				auto nextScene = HomunChooseScene::createScene();
 				auto pScene = TransitionFade::create(0.5f, nextScene);

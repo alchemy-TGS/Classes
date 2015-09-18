@@ -7,7 +7,7 @@
 #include "HomunData.h"
 #include "QuestList.h"
 #include "HardScene.h"
-#include "TItleScene.h"
+#include "TownScene2.h"
 
 USING_NS_CC;
 
@@ -67,6 +67,8 @@ private:
 	Atom *keepAtom;
 	
 	
+	//	セーブデータから次のClearのシーン遷移
+	int sceneChangeCount;
 	
 	//------------------関数------------------
 	

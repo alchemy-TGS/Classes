@@ -3,14 +3,23 @@
 
 std::string conditionImage[] = {
     "AlchemyImg/Header/QuestChar/quest_H2O.png",
+	"AlchemyImg/Header/QuestChar/quest_CO2.png",
+	"AlchemyImg/Header/QuestChar/quest_NH3.png",
+	"AlchemyImg/Header/QuestChar/quest_C2H5OH.png",
 };
 
 int conditionType[] = {
-    HOMUN_CO2,
+    HOMUN_H2O,
+	HOMUN_CO2,
+	HOMUN_NH3,
+	HOMUN_C2H5OH,
 };
 
 int condition[] = {
-    30,
+    10,
+	10,
+	 5,
+	10,
 };
 
 

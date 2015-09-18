@@ -156,8 +156,8 @@ bool PuzzleScene::init() {
 	
 	
 	//条件の表示
-	condition = QuestList::getcondition(savedata->getIntegerForKey("QuestConditionKey", 0));
-	conditionType = QuestList::getconditionType(savedata->getIntegerForKey("QuestConditionKey", 0));
+	condition = QuestList::getcondition(savedata->getIntegerForKey("QuestConditionKey"));
+	conditionType = QuestList::getconditionType(savedata->getIntegerForKey("QuestConditionKey"));
 	CCLOG("condi:%d",conditionType);
 	conditionLabel = LabelTTF::create("", "fonts/mplus-2p-heavy.ttf", int(size.height/12));
 	conditionLabel->setPosition(Point(header->getContentSize().width / 4 * 3,
@@ -174,7 +174,7 @@ bool PuzzleScene::init() {
 	
 	//初期タイマーのセット
 	timeswitch = true;
-	nowTime = 300;			//秒
+	nowTime = 120;			//秒
     
     for(int i=0;i<homuns;i++){
         nowSkillEffectTime[i] = 0;
@@ -190,7 +190,10 @@ bool PuzzleScene::init() {
 	this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
 	
     
-    
+	//	セーブデータから次のクリア時のシーンを判定
+	sceneChangeCount = savedata->getIntegerForKey("ClearSceneKey");
+	
+	
 	/////////
 	
 	this->scheduleUpdate();
@@ -412,9 +415,21 @@ void PuzzleScene::clearCheck(){
 		//ここにシーン遷移
 		log("Claer!!");
 		if (flag == 0) {
-			auto nextScene = HardScene::createScene();
-			auto pScene = TransitionSlideInT::create(1.5, nextScene);
-			Director::getInstance()->replaceScene(pScene);
+			switch(sceneChangeCount){
+				case 0:{
+					auto nextScene = TownScene2::createScene();
+					auto pScene = TransitionCrossFade::create(1.5, nextScene);
+					Director::getInstance()->replaceScene(pScene);
+					break;
+				}
+				case 1:{
+					auto nextScene = HardScene::createScene();
+					auto pScene = TransitionCrossFade::create(1.5, nextScene);
+					Director::getInstance()->replaceScene(pScene);
+					break;
+				}
+			}
+					
 			flag++;
 		}
 	}
@@ -426,7 +441,7 @@ void PuzzleScene::gameOverCheck(){
     if(nowTime < 0){
         log("GameOver");
 		auto nextScene = HardScene::createScene();
-		auto pScene = TransitionSlideInT::create(1.5, nextScene);
+		auto pScene = TransitionCrossFade::create(1.5, nextScene);
 		Director::getInstance()->replaceScene(pScene);
     }
 }

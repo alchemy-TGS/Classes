@@ -60,12 +60,13 @@ bool HardScene::init()
 				mes->setString("えっと、本日のあるけみぃの\n試遊はここまでになります。"); break;
 			case 4:
 				mes->setString("今後はもっともっと\n私達の仲間が増える予定です。");break;
-			case 6:
+			case 5:
 				mes->setString("よろしければ\nまた、遊んでください。");break;
-			case 7:
+			case 6:
 				mes->setString("ありがとうございました。");break;
-			case 8:
+			case 7:
 			{
+				UserDefault::destroyInstance();
 				auto nextScene = TitleScene::createScene();
 				auto pScene = TransitionFade::create(0.5f, nextScene);
 				Director::getInstance()->replaceScene(pScene);
