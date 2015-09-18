@@ -39,7 +39,7 @@ int bondCount[] = {
 	2,
 };
 
-int destroyPattern[9][8] = {
+int destroyPattern[][8] = {
     //  H   He  li  Be  B   C   N   O   last
     {
         2,  0,  0,  0,  0,  0,  0,  0,
@@ -68,6 +68,9 @@ int destroyPattern[9][8] = {
     {
         3,  0,  0,  0,  0,  0,  1,  0,
     },
+	{
+		0,	0,	0,	0,	0,	0,	0,	3,
+	},
 };
 
 
@@ -99,4 +102,9 @@ std::string AtomData::GetPinchBondImageName()
 int* AtomData::GetDestroyPattern()
 {
     return *destroyPattern;
+}
+
+int AtomData::GetDestroyPatternNum()
+{
+	return sizeof(destroyPattern) / sizeof(destroyPattern[0]);
 }

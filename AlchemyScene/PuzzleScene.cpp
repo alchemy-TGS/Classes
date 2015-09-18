@@ -167,7 +167,7 @@ bool PuzzleScene::init() {
 	
 	
 	//タイマーの表示
-	timerlabel = CCLabelTTF::create("0:00", "fonts/mplus-2p-heavy.ttf", int(size.height/19));
+	timerlabel = CCLabelTTF::create("∞", "fonts/mplus-2p-heavy.ttf", int(size.height/19));
 	timerlabel->setPosition(Point(size.width/2,size.height/50*48));
 	this->addChild(timerlabel);
 	
@@ -368,8 +368,8 @@ void PuzzleScene::timerUpdate(float delta){
 	int timeM = int(nowTime)/60;
 	int timeS = int(nowTime)%60;
 	
-	String *timestr = String::createWithFormat("%2.2d:%2.2d",timeM,timeS);
-	timerlabel->setString(timestr->getCString());
+//	String *timestr = String::createWithFormat("%2.2d:%2.2d",timeM,timeS);
+//	timerlabel->setString(timestr->getCString());
 	
 	// タイマーの色
 	if(nowTime < 60){
@@ -495,8 +495,9 @@ void PuzzleScene::atomGenerate(float delta){
 //グループの削除判定確認から削除まで         ※とても汚い...
 void PuzzleScene::groupDelete(){
 	auto pPattern = AtomData::GetDestroyPattern();
+	auto pPatternNum = AtomData::GetDestroyPatternNum();
 	for(int group_i=0;group_i<atoms;group_i++){
-		for(int arra_i = 0;arra_i<9;arra_i++){
+		for(int arra_i = 0;arra_i<pPatternNum;arra_i++){
 			int arra[] = {
 				*(pPattern + arra_i * 8),
 				*(pPattern + arra_i * 8 + 1),

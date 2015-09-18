@@ -16,10 +16,10 @@ int conditionType[] = {
 };
 
 int condition[] = {
-    10,
-	10,
+     5,
 	 5,
-	10,
+	 5,
+	 5,
 };
 
 
